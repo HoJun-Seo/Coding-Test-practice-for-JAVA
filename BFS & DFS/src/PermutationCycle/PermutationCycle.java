@@ -13,20 +13,17 @@ public class PermutationCycle {
 		int count = 0;
 		int size = 0;
 		
-		str = br.readLine();
-		StringTokenizer st = new StringTokenizer(str);
-		count = Integer.parseInt(st.nextToken());
+		count = Integer.parseInt(br.readLine());
 		int []count_size = new int[count];
 		
 		for(int i = 0; i < count; i++) {
-			str = br.readLine();
-			st = new StringTokenizer(str);
-			size = Integer.parseInt(st.nextToken());
+			size = Integer.parseInt(br.readLine());
 			int []Cycle = new int[size];
 			int []flag = new int[size];
 			
+			
 			str = br.readLine();
-			st = new StringTokenizer(str);
+			StringTokenizer st = new StringTokenizer(str);
 			// 입력한 순열 데이터를 배열에 삽입한다.
 			for(int j = 1; j <= size; j++) {
 				Cycle[j - 1] = Integer.parseInt(st.nextToken());
