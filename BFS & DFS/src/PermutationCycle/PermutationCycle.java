@@ -22,8 +22,7 @@ public class PermutationCycle {
 			int []flag = new int[size];
 			
 			
-			str = br.readLine();
-			StringTokenizer st = new StringTokenizer(str);
+			StringTokenizer st = new StringTokenizer(br.readLine());
 			// 입력한 순열 데이터를 배열에 삽입한다.
 			for(int j = 1; j <= size; j++) {
 				Cycle[j - 1] = Integer.parseInt(st.nextToken());
