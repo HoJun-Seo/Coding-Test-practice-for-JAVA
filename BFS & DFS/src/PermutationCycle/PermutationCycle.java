@@ -9,7 +9,6 @@ import java.util.StringTokenizer;
 public class PermutationCycle {
 	public static void main(String[] args) throws IOException {
 		BufferedReader br = new BufferedReader(new InputStreamReader(System.in));
-		String str = "";
 		int count = 0;
 		int size = 0;
 		
