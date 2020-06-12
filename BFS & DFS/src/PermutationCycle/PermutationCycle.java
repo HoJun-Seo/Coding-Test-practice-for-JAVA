@@ -38,7 +38,7 @@ public class PermutationCycle {
 				else if(flag[j - 1] == 1 || flag[j - 1] > size) {
 					cycle_count++;
 					
-					confirm = Arrays.stream(flag).anyMatch(x -> x == 0);
+					confirm = Arrays.stream(flag).anyMatch(x -> x == 0); //자바8 스트림 활용
 					if(confirm == true) {
 						for(int k = 1; k <= size; k++) {
 							if(flag[k - 1] == 0) {
