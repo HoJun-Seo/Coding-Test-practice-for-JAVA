@@ -11,19 +11,17 @@ public class Network {
         			if(i == j) {
         				long count = Arrays.stream(computers[i]).filter(x -> x == 1 || x == -1).count();
         				if(count == 1) answer++;
-        				
+        				continue;
         			}
-        			else if(computers[j][i] == 1) {
-        				boolean match = Arrays.stream(computers[i]).anyMatch(x -> x == -1);
-        				if(match == true) {
-        					computers[i][j] *= -1;
-            				computers[j][i] *= -1;
-        				}
-        				else {
-        					computers[i][j] *= -1;
-        					computers[j][i] *= -1;
-        					answer++;
-        				}
+        			long match = Arrays.stream(computers[i]).filter(x -> x == -1).count();
+        			if(match > 0) {
+        				computers[i][j] *= -1;
+            			computers[j][i] *= -1;
+        			}
+        			else {
+        				computers[i][j] *= -1;
+        				computers[j][i] *= -1;
+        				answer++;
         			}
         		}
         	}
