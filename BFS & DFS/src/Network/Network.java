@@ -11,26 +11,26 @@ class Solution {
         			if(i == j) {
         				long count = Arrays.stream(computers[i]).filter(x -> x == 1 || x == -1).count();
         				if(count == 1) {
-                            answer++;
-                            continue;
-                        }
+                            			answer++;
+                            			continue;
+                        		}
         				else continue;
         			}
         			long match = Arrays.stream(computers[i]).filter(x -> x == -1).count();
         			if(match > 0) {
         				long match2 = Arrays.stream(computers[j]).filter(x -> x == -1).count();
         				if(match2 > 0 && answer >= 2) {
-                            computers[i][j] *= -1;
-                            computers[j][i] *= -1;
+                            			computers[i][j] *= -1;
+                            			computers[j][i] *= -1;
         					answer--;
-                            continue;
+                            			continue;
         				}
         				computers[i][j] *= -1;
-                        computers[j][i] *= -1;
+                        		computers[j][i] *= -1;
         			}
         			else {
         				computers[i][j] *= -1;
-                        computers[j][i] *= -1;
+                        		computers[j][i] *= -1;
         				answer++;
         			}
         		}
@@ -38,6 +38,6 @@ class Solution {
         }
         long count2 = Arrays.stream(computers[n - 1]).filter(x -> x == -1).count();
         if(count2 == 0) answer++;
-		return answer;
+	return answer;
     }
 }
