@@ -11,23 +11,14 @@ class Solution {
     	for(int i = 0; i < phone_book.length; i++) {
     		phoneHash.put(i, phone_book[i]);
     	}
-    	int[] array_length = new int[phone_book.length];
+    	Arrays.sort(phone_book);
     	for(int i = 0; i < phoneHash.size(); i++) {
-    		array_length[i] = phoneHash.get(i).length();
-    	}
-    	Arrays.sort(array_length);
-    	for(int i = 0; i < phoneHash.size(); i++) {
-    		if(array_length[0] == phoneHash.get(i).length()) {
-    			index = i;
-    			break;
-    		}
-    	}
-    	
-    	for(int i = 0; i < phoneHash.size(); i++) {
-    		if(index == i) continue;
-    		else if(phoneHash.get(index).contains(phoneHash.get(i).substring(0, phoneHash.get(index).length()))) {
-    			answer = false;
-    			break;
+    		if(phoneHash.get(i).startsWith(phone_book[0])) {
+    			if(phoneHash.get(i).equals(phone_book[0])) answer = true;
+    			else {
+    				answer = false;
+    				break;
+    			}
     		}
     	}
         return answer;
