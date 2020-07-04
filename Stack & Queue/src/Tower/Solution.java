@@ -1,8 +1,20 @@
 package Tower;
 
+import java.util.Arrays;
+import java.util.Stack;
+
 public class Solution {
 	public int[] solution(int[] heights) {
-        int[] answer = {};
+		Stack<Integer> stack = new Stack<Integer>();
+		for(int i = 0; i < heights.length; i++) {
+			stack.push(heights[i]);
+		}
+		int[] answer = new int[heights.length];
+		for(int i = heights.length - 1; i > 0; i--) {
+			int top = stack.pop();
+			if(stack.isEmpty()) break;
+			
+		}
         return answer;
     }
 	//heights 배열은 왼쪽에서 부터 순서대로 길이값을 가지고 있는 각 타워들
