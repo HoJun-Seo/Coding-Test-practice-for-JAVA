@@ -1,23 +1,17 @@
 package Maraton;
 
+import java.util.Arrays;
 
 class Solution {
     public String solution(String[] participant, String[] completion) {
-        String answer = "";
-        int j = 0;
-        for(int i = 0; i < participant.length; i++) {
-        	for(j = 0; j < completion.length; j++) {
-        		if(participant[i].equals(completion[j])) {
-        			completion[j] = "complete";
-        			break;
-        		}
-        	}
-        	if(j == completion.length) {
-        		answer = participant[i];
-        	    break;
-        	}
+    	Arrays.sort(participant);
+        Arrays.sort(completion);
+
+        for (int i = 0; i < completion.length; i++) {
+            if (!participant[i].equalsIgnoreCase(completion[i])) // 대소문자 구분없이 비교
+                return participant[i];
         }
-		return answer;
-        
+
+        return participant[completion.length];
     }
 }
