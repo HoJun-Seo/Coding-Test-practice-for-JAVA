@@ -1,7 +1,8 @@
 package ability_develop;
 
 import java.util.ArrayList;
-
+// List 의 내용을 remove 할 때 삭제된 요소로 인해 인덱스 에러가 발생하고 있는듯 하다.
+// ArrayList 가 아닌 Queue 를 사용하는 방법을 생각해보자
 class Solution {
     public int[] solution(int[] progresses, int[] speeds) {
         int answer_index = 0;
@@ -18,6 +19,7 @@ class Solution {
         			spread_queue.set(answer_index, spread_queue.get(answer_index) + 1);
         		}
         		answer_index++;
+        		for(int i = 0; i < ability_queue.size(); i++) ability_queue.set(i, ability_queue.get(i) + speed_queue.get(i));
         	}
         	else {
         		for(int i = 0; i < ability_queue.size(); i++) ability_queue.set(i, ability_queue.get(i) + speed_queue.get(i));
