@@ -1,0 +1,33 @@
+package Character_Numbers;
+
+import java.util.ArrayList;
+import java.util.List;
+
+public class Solution6 {
+	public static void main(String[] args) {
+		int n = 5;
+		int answer = 0;
+		int[] lost = {3,4};
+		int[] reserve = {2,3,5};
+		
+		List<Integer> lost_list = new ArrayList<Integer>();
+		List<Integer> reserve_list = new ArrayList<Integer>();
+		
+		for(int i = 0; i < lost.length; i++) {
+			lost_list.add(lost[i]);
+		}
+		
+		for(int i = 0; i < reserve.length; i++) {
+			reserve_list.add(reserve[i]);
+		}
+			
+		// 여벌의 체육복을 가진 학생 중 체육복을 잃어버린 학생에 대한 처리
+		for(int i = 0; i < lost_list.size(); i++) {
+			int lost_number = lost_list.get(i);
+			if(reserve_list.contains(lost_number)) {
+				reserve_list.remove(lost_number);
+				lost_list.remove(lost_number);
+			}
+		}
+	}
+}
