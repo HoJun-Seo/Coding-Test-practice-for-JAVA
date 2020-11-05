@@ -42,6 +42,7 @@ public class Solution6 {
 				reserve_list.remove(reserve_list.indexOf(i+1));
 				answer++;
 			}
+			// 빌려줄 수 있는 학생이 없는 경우 체육복을 입고 나올수 있는 학생의 숫자를 더하지 않는다.
 			else if(lost_list.contains(i) && !(reserve_list.contains(i-1) && reserve_list.contains(i+1))) continue;
 			
 			else answer++;
