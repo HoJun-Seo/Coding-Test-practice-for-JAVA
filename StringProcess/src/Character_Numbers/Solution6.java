@@ -25,9 +25,29 @@ public class Solution6 {
 		for(int i = 0; i < lost_list.size(); i++) {
 			int lost_number = lost_list.get(i);
 			if(reserve_list.contains(lost_number)) {
-				reserve_list.remove(lost_number);
-				lost_list.remove(lost_number);
+				reserve_list.remove(reserve_list.indexOf(lost_number));
+				lost_list.remove(lost_list.indexOf(lost_number));
 			}
 		}
+		
+		// 체육복을 잃어버린 학생에게 체육복을 빌려줄 수 있거나, 빌려줄 수 없는 경우에 대한 처리
+		for(int i = 0; i < n; i++) {
+			if(lost_list.contains(i) && reserve_list.contains(i-1)) {
+				lost_list.remove(lost_list.indexOf(i));
+				reserve_list.remove(reserve_list.indexOf(i-1));
+				answer++;
+			}
+			else if(lost_list.contains(i) && reserve_list.contains(i+1)) {
+				lost_list.remove(lost_list.indexOf(i));
+				reserve_list.remove(reserve_list.indexOf(i+1));
+				answer++;
+			}
+			else if(lost_list.contains(i) && !(reserve_list.contains(i-1) && reserve_list.contains(i+1))) continue;
+			
+			else answer++;
+		}
+		
+		System.out.println(answer);
+		
 	}
 }
