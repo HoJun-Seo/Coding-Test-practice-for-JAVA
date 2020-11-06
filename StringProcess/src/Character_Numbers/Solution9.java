@@ -48,7 +48,6 @@ public class Solution9 {
 					board[j][index] = 0;
 					break;
 				}
-				
 			}
 		}
 		
