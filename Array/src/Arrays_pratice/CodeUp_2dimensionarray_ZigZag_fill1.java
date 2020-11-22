@@ -7,24 +7,22 @@ import java.io.InputStreamReader;
 public class CodeUp_2dimensionarray_ZigZag_fill1 {
 	public static void main(String[] args) throws IOException{
 		BufferedReader br = new BufferedReader(new InputStreamReader(System.in));
-		int n = br.readLine().charAt(0) - '0';
+		int n = Integer.parseInt(br.readLine());
 		int[][] ZigZag_array = new int[n][n];
 		
 		int number = 1;
 		int x = 0, y = 0;
 		
-		while(number <= 25) {
-			if(y == 0) {
-				while(y < n) {
+		while(number <= n*n) {
+			if(y <= 0) {
+				for(y = 0; y < n; y++){
 					ZigZag_array[x][y] = number++;
-					y++;
 				}
 				x++;
 			}
-			else if(y == n - 1) {
-				while(y >= 0) {
+			else if(y == n) {
+				for(y = n - 1; y >= 0; y--) {
 					ZigZag_array[x][y] = number++;
-					y--;
 				}
 				x++;
 			}
