@@ -18,6 +18,7 @@ public class CodeUp_2dimensionarray_ReversOrder_fill3 {
 			for(int y = 0; y < col; y++) {
 				ReverseOrder_array_col[x][y] = number--;
 				System.out.print(ReverseOrder_array_col[x][y] + " ");
+				
 			}
 			System.out.println();
 		}
