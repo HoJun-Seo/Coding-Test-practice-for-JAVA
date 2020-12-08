@@ -14,6 +14,7 @@ public class CodeUp_2dimensionarray_InOrder_fill2 {
 		for(int y = 0; y < n; y++) {
 			for(int x = 0; x < n; x++) {
 				InOrder_array_col[x][y] = ++i;
+				
 			}
 		}
 		
