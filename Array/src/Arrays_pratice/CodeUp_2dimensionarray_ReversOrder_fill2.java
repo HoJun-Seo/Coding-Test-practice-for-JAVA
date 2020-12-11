@@ -13,6 +13,7 @@ public class CodeUp_2dimensionarray_ReversOrder_fill2 {
 		
 		for(int x = 0; x < n; x++ , i--) {
 			ReverseOrder_array_col[x][0] = i;
+			
 		}
 		
 		for(int x = 0; x < n; x++) {
