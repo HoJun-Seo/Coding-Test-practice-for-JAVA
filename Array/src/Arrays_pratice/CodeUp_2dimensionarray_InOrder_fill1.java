@@ -15,6 +15,7 @@ public class CodeUp_2dimensionarray_InOrder_fill1 {
 			for(int y = 0; y < n; y++) {
 				InOrder_array[x][y] = ++i;
 				System.out.print(InOrder_array[x][y] + " ");
+				
 			}
 			System.out.println();
 		}
