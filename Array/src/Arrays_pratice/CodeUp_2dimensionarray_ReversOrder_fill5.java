@@ -17,6 +17,7 @@ public class CodeUp_2dimensionarray_ReversOrder_fill5 {
 		for(int y = 0; y < col; y++) {
 			ReverseOrder_array_col[0][y] = number;
 			number -= row;
+			
 		}
 		
 		for(int x = 1; x < row; x++) {
