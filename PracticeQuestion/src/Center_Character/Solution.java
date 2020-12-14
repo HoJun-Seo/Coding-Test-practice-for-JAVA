@@ -7,6 +7,7 @@ class Solution {
         if(s.length() % 2 != 0) {
         	int index = (s.length() / 2) + 1;
         	answer = Character.toString(s.charAt(index));
+        
         }
         else {
         	int index = s.length() / 2;
