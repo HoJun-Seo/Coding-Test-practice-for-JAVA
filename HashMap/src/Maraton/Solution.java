@@ -10,6 +10,7 @@ class Solution {
         for (int i = 0; i < completion.length; i++) {
             if (!participant[i].equalsIgnoreCase(completion[i])) // 대소문자 구분없이 비교
                 return participant[i];
+            
         }
 
         return participant[completion.length];
