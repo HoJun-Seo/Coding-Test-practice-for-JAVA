@@ -13,6 +13,7 @@ class Solution {
         	if(priorityqueue.size() <= 1 && priorityqueue.peek() < K) {
         		answer = -1;
         		break;
+                
         	}
         	else if(priorityqueue.size() > 1 && priorityqueue.peek() < K) {
         		priorityqueue.offer(priorityqueue.poll() + (priorityqueue.poll() * 2));
