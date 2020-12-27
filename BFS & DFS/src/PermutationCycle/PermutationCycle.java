@@ -49,8 +49,7 @@ public class PermutationCycle {
 					else count_size[i] = cycle_count;
 				}
 			}
-		}
-		
+		}	
 		for(int i = 0; i < count; i++) {
 			System.out.println(count_size[i]);
 		}
