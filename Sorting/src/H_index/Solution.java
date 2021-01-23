@@ -22,6 +22,7 @@ class Solution {
         				if(answer >= i && h_index.length - answer <= answer) {
         					answer = i;
         					break loop;
+                            
         				}
         				else {
         					sort_stack.clear();
