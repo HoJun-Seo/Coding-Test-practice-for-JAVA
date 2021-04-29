@@ -20,7 +20,6 @@ public class PermutationCycle {
 			int []Cycle = new int[size];
 			int []flag = new int[size];
 			
-			
 			StringTokenizer st = new StringTokenizer(br.readLine());
 			// 입력한 순열 데이터를 배열에 삽입한다.
 			for(int j = 1; j <= size; j++) {
@@ -50,8 +49,7 @@ public class PermutationCycle {
 					else count_size[i] = cycle_count;
 				}
 			}
-		}
-		
+		}	
 		for(int i = 0; i < count; i++) {
 			System.out.println(count_size[i]);
 		}
