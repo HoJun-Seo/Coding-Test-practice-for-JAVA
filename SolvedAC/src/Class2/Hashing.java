@@ -3,8 +3,8 @@ package Class2;
 import java.io.BufferedReader;
 import java.io.IOException;
 import java.io.InputStreamReader;
+import java.math.BigInteger;
 import java.util.HashMap;
-
 
 public class Hashing {
 	public static void main(String[] args) throws NumberFormatException, IOException {
@@ -25,22 +25,21 @@ public class Hashing {
 			value++;
 		}
 		
-		int result = 0;
+		BigInteger result = new BigInteger("0");
 		for(int i = 0; i < alphabetArray.length; i++) {
-			int tempValue = 1;
-			int hashValue = alphabetHash.get(alphabetArray[i]).intValue();
+			BigInteger tempValue = new BigInteger("1");
+			Long hashValue = alphabetHash.get(alphabetArray[i]).longValue();
 			if(i == 0) {
-				result = hashValue;
+				result = new BigInteger(String.valueOf(hashValue));
 			}
 			else {
 				for(int j = 0; j < i; j++) {
-					tempValue *= 31;
+					tempValue = tempValue.multiply(new BigInteger("31"));
 				}
-				result += (tempValue * hashValue);
+				result = result.add(tempValue.multiply(new BigInteger(String.valueOf(hashValue)))).mod(new BigInteger("1234567891"));
 			}
 		}
 		
 		System.out.println(result);
-		
 	}
 }
