@@ -1,8 +1,7 @@
 package Iron_Stick;
 
 import java.util.Stack;
-
-class Solution {
+public class Solution {
     public int solution(String arrangement) {
         int answer = 0;
         arrangement = arrangement.replace("()", "L");
