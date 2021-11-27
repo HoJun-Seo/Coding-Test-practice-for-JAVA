@@ -24,12 +24,13 @@ public class BST_main {
 			bw.write("메뉴를 선택하세요 \n");
 			bw.write("1. 트리 데이터 삽입\n");
 			bw.write("2. 트리 데이터 검색\n");
-			bw.write("3. 프로그램 종료\n");
+			bw.write("3. 트리 데이터 삭제\n");
+			bw.write("4. 프로그램 종료\n");
 			bw.write("메뉴 선택 : ");
 			bw.flush();
 			option = br.readLine();
 			
-			if(option.equals("3")) {
+			if(option.equals("4")) {
 				bw.write("\n프로그램이 종료 됩니다.\n");
 				bw.flush();
 				break;
@@ -43,6 +44,18 @@ public class BST_main {
 				bw.write("\n검색하고자 하는 데이터를 입력하세요(숫자) : ");
 				bw.flush();
 				mgnt.search(Integer.parseInt(br.readLine()));
+			}
+			else if(option.equals("3")) {
+				bw.write("\n삭제하고자 하는 데이터를 입력하세요(숫자.) : ");
+				bw.flush();
+				if(mgnt.delete(Integer.parseInt(br.readLine()))) {
+					bw.write("데이터가 정상적으로 삭제되었습니다.\n\n");
+					bw.flush();
+				}
+				else {
+					bw.write("해당 데이터가 존재하지 않습니다.\n\n");
+					bw.flush();
+				}
 			}
 		}
 	}
