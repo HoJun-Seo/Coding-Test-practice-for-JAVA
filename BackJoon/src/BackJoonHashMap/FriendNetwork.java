@@ -59,7 +59,6 @@ public class FriendNetwork {
 			try {
 				bw.write(x + "\n");
 			} catch (IOException e) {
-				// TODO Auto-generated catch block
 				e.printStackTrace();
 			}
 		});
