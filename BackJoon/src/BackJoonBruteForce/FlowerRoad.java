@@ -21,6 +21,7 @@ public class FlowerRoad {
 		
 		int size = Integer.parseInt(br.readLine());
 		flower = new int[size][size];
+		check = new boolean[size][size];
 		
 		for(int i = 0; i < size; i++) {
 			StringTokenizer st = new StringTokenizer(br.readLine(), " ");
@@ -34,6 +35,10 @@ public class FlowerRoad {
 		// 각 재귀호출 마다 배열의 끝까지 탐색이 끝났거나, 꽃잎이 3개씩 설치가 되었을 경우 백트래킹 한다.
 		dfs(0,0);
 		
+		bw.write(result + "\n");
+		bw.flush();
+		bw.close();
+		
 	}
 	private static void dfs(int count, int sum) {
 		if(count == 3) {
@@ -42,35 +47,44 @@ public class FlowerRoad {
 		else {
 			// 탐색 결과 꽃잎 설치가 가능한것이 확인될 경우
 			// 현재 합계와 탐색한 땅값을 합산한 값을 더해준다.
+			for(int i = 1; i < flower.length-1; i++) {
+				for(int j = 1; j < flower[i].length-1; j++) {
+					boolean cross = true;
+					for(int p = 0; p < 4; p++) {
+						int ii = i + dx[p];
+						int jj = j + dy[p];
+						
+						if(check[ii][jj]) {
+							cross = false;
+							break;
+						}
+					}
+					if(!check[i][j] && cross) {
+						check[i][j] = true;
+						
+						int total = flower[i][j];
+						for(int p = 0; p < 4; p++) {
+							int ii = i + dx[p];
+							int jj = j + dy[p];
+							
+							check[ii][jj] = true;
+							total += flower[ii][jj];
+						}
+						
+						dfs(count+1, sum+total);
+						
+						// 꽃잎이 3개 설치되었을 때 다음 연산을 위해 마지막 꽃잎의 방문 정보를 초기화한다.
+						for(int p = 0; p < 4; p++) {
+							int ii = i + dx[p];
+							int jj = j + dy[p];
+							
+							check[ii][jj] = false;
+						}
+						check[i][j] = false;
+					}
+				}
+			}
 		}
 		
-	}
-}
-
-class FlowerCoordinate implements Comparable<FlowerCoordinate>{
-	private int x;
-	private int y;
-	
-	private int groundValue;
-	
-	public FlowerCoordinate(int x, int y, int groundValue) {
-		this.x = x;
-		this.y = y;
-		this.groundValue = groundValue;
-	}
-	
-	public int getGroundValue() {
-		return groundValue;
-	}
-	public int getX() {
-		return x;
-	}
-	public int getY() {
-		return y;
-	}
-
-	@Override
-	public int compareTo(FlowerCoordinate o) {
-		return this.groundValue - o.getGroundValue();
 	}
 }
