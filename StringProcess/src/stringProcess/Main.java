@@ -1,4 +1,4 @@
-package Character_Numbers;
+package stringProcess;
 
 import java.io.BufferedReader;
 import java.io.IOException;
