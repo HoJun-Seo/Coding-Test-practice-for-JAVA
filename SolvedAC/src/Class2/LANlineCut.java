@@ -5,47 +5,51 @@ import java.io.BufferedWriter;
 import java.io.IOException;
 import java.io.InputStreamReader;
 import java.io.OutputStreamWriter;
-import java.util.ArrayList;
-import java.util.Collections;
-import java.util.List;
-import java.util.StringTokenizer;
 
 public class LANlineCut {
 	public static void main(String[] args) throws IOException {
 		BufferedReader br = new BufferedReader(new InputStreamReader(System.in));
 		BufferedWriter bw = new BufferedWriter(new OutputStreamWriter(System.out));
-		List<Integer> list = new ArrayList<Integer>();
 		
-		StringTokenizer st = new StringTokenizer(br.readLine(), " ");
-		int k = Integer.parseInt(st.nextToken());
-		int n = Integer.parseInt(st.nextToken());
-		
-		for(int i = 0; i < k; i++) {
-			list.add(Integer.parseInt(br.readLine()));
+		String[] inputArray = br.readLine().split(" ");
+		int curline = Integer.parseInt(inputArray[0]);
+		int reqline = Integer.parseInt(inputArray[1]);
+		long[] lineArray = new long[curline];
+
+		long max = 0;
+		for(int i = 0; i < curline; i++){
+
+			long length = Long.parseLong(br.readLine());
+			lineArray[i] = length;
+			if(max < length)
+				max = length;
 		}
-		
-		int end = Collections.max(list) + 1;
-		int start = 0;
-		int count = 0;
-		
-		// end 가 start 보다 작아지면 그 값이 곧 최대값이다.(매개변수 탐색 - Upper Bound)
-		while(end > start) {
-			int middle = (start + end) / 2;
-			count = 0;
-			
-			for(int i = 0; i < list.size(); i++) {
-				count += list.get(i) / middle;
+
+		long start = 1;
+		long end = max+1;
+		long mid = 0;
+		while(start+1 < end){
+			mid = (start + end) / 2;
+
+			long sum = 0;
+			for(int i = 0; i < lineArray.length; i++){
+				long line = lineArray[i];
+
+				long cutCount = line/mid;
+				sum += cutCount;
 			}
-			if(count >= n) {
-				start = middle+1;
+
+			if(sum < reqline){
+				end = mid;
 			}
-			else {
-				end = middle;
+			else{
+				start = mid;
 			}
 		}
-		
-		bw.write(end-1 + "\n");
+
+		bw.write(start + "\n");
 		bw.flush();
 		bw.close();
+		br.close();
 	}
 }
