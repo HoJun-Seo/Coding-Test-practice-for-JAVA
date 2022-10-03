@@ -6,48 +6,42 @@ import java.io.IOException;
 import java.io.InputStreamReader;
 import java.io.OutputStreamWriter;
 import java.util.Arrays;
-import java.util.Collections;
-import java.util.HashMap;
-import java.util.LinkedList;
-import java.util.StringTokenizer;
 
 public class CoordinateSort2 {
 	public static void main(String[] args) throws NumberFormatException, IOException {
 		BufferedReader br = new BufferedReader(new InputStreamReader(System.in));
 		BufferedWriter bw = new BufferedWriter(new OutputStreamWriter(System.out));
-		HashMap<Integer, LinkedList<Integer>> hashmap = new HashMap<Integer, LinkedList<Integer>>();
 		
 		int count = Integer.parseInt(br.readLine());
-		for(int i = 0; i < count; i++) {
-			StringTokenizer st = new StringTokenizer(br.readLine(), " ");
-			int x = Integer.parseInt(st.nextToken());
-			int y = Integer.parseInt(st.nextToken());
-			LinkedList<Integer> list = new LinkedList<Integer>();
-			
-			if(hashmap.containsKey(y)) {
-				list = hashmap.get(y);
-				list.add(x);
-				hashmap.replace(y, list);
-			}
-			else {
-				list.add(x);
-				hashmap.put(y, list);
-			}
+		int[][] coorArray = new int[count][2];
+
+		for(int i = 0; i < count; i++){
+			String[] inputArray = br.readLine().split(" ");
+
+			coorArray[i][0] = Integer.parseInt(inputArray[0]);
+			coorArray[i][1] = Integer.parseInt(inputArray[1]);
 		}
-		
-		Object[] keyArray = hashmap.keySet().toArray();
-		Arrays.sort(keyArray);
-		for(int i = 0; i < keyArray.length; i++) {
-			LinkedList<Integer> list = hashmap.get(keyArray[i]);
-			if(list.size() > 1)
-				Collections.sort(list);
-			
-			for(int index = 0; index < list.size(); index++) {
-				bw.write(list.get(index) + " " + keyArray[i] + "\n");
+
+		Arrays.sort(coorArray, (o1, o2) -> {
+			if(o1[1] == o2[1]){
+				// x 좌표의 값이 같을 경우 y 좌표를 통해 비교
+				return Integer.compare(o1[0], o2[0]);
 			}
+			else{
+				// x 좌표의 값이 다를 경우 x 좌표 만으로 비교
+				return Integer.compare(o1[1], o2[1]);
+			}
+		});
+
+		for(int i = 0; i < coorArray.length; i++){
+			for(int j = 0; j < 2; j++){
+				bw.write(coorArray[i][j] + " ");
+			}
+			bw.write("\n");
 		}
-		
+
 		bw.flush();
 		bw.close();
+		br.close();
 	}
 }
