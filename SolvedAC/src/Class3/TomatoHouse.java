@@ -43,7 +43,6 @@ public class TomatoHouse{
                     Tomato tomato = new Tomato();
                     tomato.i = i;
                     tomato.j = j;
-                    tomato.visitValue = (i*col)+j;
                     tomato.depth = 0; // 시작 노드의 깊이는 0
 
                     needVisit.offer(tomato);
@@ -75,19 +74,19 @@ public class TomatoHouse{
                     // 4방향으로 값이 0 인 자식 노드들 찾아서 방문필요 큐에 적재
                     // 인덱스 범위 고려해야함(대각선은 고려할 필요 없음)
                     if((i-1) >= 0 && matrix[i-1][j] == 0){ // 위쪽 행이 존재할 경우
-                        offerQueue(tomato, i-1, j, col);
+                        offerQueue(tomato, i-1, j);
                         matrix[i-1][j] = 1;
                     }
                     if((i+1) < row && matrix[i+1][j] == 0){ // 아래쪽 행이 존재할 경우
-                        offerQueue(tomato, i+1, j, col);
+                        offerQueue(tomato, i+1, j);
                         matrix[i+1][j] = 1;
                     }
                     if((j-1) >= 0 && matrix[i][j-1] == 0){ // 왼쪽 행이 존재할 경우
-                        offerQueue(tomato, i, j-1, col);
+                        offerQueue(tomato, i, j-1);
                         matrix[i][j-1] = 1;
                     }
                     if((j+1) < col && matrix[i][j+1] == 0){ // 오른쪽 행이 존재할 경우
-                        offerQueue(tomato, i, j+1, col);
+                        offerQueue(tomato, i, j+1);
                         matrix[i][j+1] = 1;
                     }
 
@@ -119,12 +118,11 @@ public class TomatoHouse{
         br.close();
     }
 
-    private static void offerQueue(Tomato tomato, int i, int j, int col){
+    private static void offerQueue(Tomato tomato, int i, int j){
 
         Tomato child = new Tomato();
         child.i = i;
         child.j = j;
-        child.visitValue = (child.i*col)+child.j;
         child.depth = tomato.depth+1;
 
         needVisit.offer(child);
@@ -134,7 +132,6 @@ public class TomatoHouse{
 class Tomato{
     int i;
     int j;
-    int visitValue; // 방문확인 배열 인덱스 용 
     int depth; // 현재 탐색 깊이 - 탐색 시 최대 높이가 곧 모든 토마토 들이 익는 날짜가 될 것
     // 자식 노드로 탐색이 뻗어갈때마다 깊이 값이 추가됨
 }
