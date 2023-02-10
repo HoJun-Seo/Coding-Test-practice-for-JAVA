@@ -17,48 +17,46 @@ public class HumanOverlap {
 		BufferedReader br = new BufferedReader(new InputStreamReader(System.in));
 		BufferedWriter bw = new BufferedWriter(new OutputStreamWriter(System.out));
 		HashMap<String, LinkedList<Integer>> hashmap = new HashMap<String, LinkedList<Integer>>();
-		
+
 		String str = br.readLine();
 		StringTokenizer st = new StringTokenizer(str, " ");
 		int a = Integer.parseInt(st.nextToken());
 		int b = Integer.parseInt(st.nextToken());
-		
+
 		List<String> resultList = new ArrayList<String>();
-		
-		for(int i = 0; i < a; i++) {
+
+		for (int i = 0; i < a; i++) {
 			String name = br.readLine();
 			LinkedList<Integer> list = new LinkedList<Integer>();
 			list.add(0);
 			hashmap.put(name, list);
 		}
-		
-		for(int i = 0; i < b; i++) {
+
+		for (int i = 0; i < b; i++) {
 			String name = br.readLine();
 			LinkedList<Integer> list = new LinkedList<Integer>();
-			if(hashmap.containsKey(name)) {
+			if (hashmap.containsKey(name)) {
 				list = hashmap.get(name);
 				list.add(0);
 				hashmap.replace(name, list);
-				
+
 				resultList.add(name);
-			}
-			else {
+			} else {
 				list.add(0);
 				hashmap.put(name, list);
 			}
 		}
-		
+
 		bw.write(resultList.size() + "\n");
 		Collections.sort(resultList);
 		resultList.stream().forEach(x -> {
 			try {
 				bw.write(x + "\n");
 			} catch (IOException e) {
-				// TODO Auto-generated catch block
 				e.printStackTrace();
 			}
 		});
-		
+
 		bw.flush();
 		bw.close();
 	}

@@ -12,21 +12,20 @@ public class NumberSort {
 		BufferedReader br = new BufferedReader(new InputStreamReader(System.in));
 		BufferedWriter bw = new BufferedWriter(new OutputStreamWriter(System.out));
 		Integer[] sortArray = new Integer[Integer.parseInt(br.readLine())];
-		
-		for(int i = 0; i < sortArray.length; i++) {
+
+		for (int i = 0; i < sortArray.length; i++) {
 			sortArray[i] = Integer.parseInt(br.readLine());
 		}
-		
+
 		Arrays.sort(sortArray);
 		Arrays.stream(sortArray).forEach(x -> {
 			try {
-				bw.write(x+"\n");
+				bw.write(x + "\n");
 			} catch (IOException e) {
-				// TODO Auto-generated catch block
 				e.printStackTrace();
 			}
 		});
-		
+
 		bw.flush();
 		bw.close();
 	}

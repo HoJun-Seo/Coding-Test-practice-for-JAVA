@@ -17,23 +17,21 @@ public class AbsHeap {
         int[] orderArray = new int[orderSize];
 
         // 명령 입력
-        for(int i = 0; i < orderArray.length; i++){
+        for (int i = 0; i < orderArray.length; i++) {
             orderArray[i] = Integer.parseInt(br.readLine());
         }
 
         // 명령 수행
-        for(int i = 0; i < orderArray.length; i++){
+        for (int i = 0; i < orderArray.length; i++) {
             // 0이면 출력
             // 0 이외의 다른 숫자라면 삽입
-            if(orderArray[i] == 0){
-                if(prior.isEmpty()){
+            if (orderArray[i] == 0) {
+                if (prior.isEmpty()) {
                     bw.write(0 + "\n");
-                }
-                else{
+                } else {
                     bw.write(prior.poll().origin + "\n");
                 }
-            }
-            else{
+            } else {
                 prior.offer(new Data(orderArray[i]));
             }
         }
@@ -44,27 +42,25 @@ public class AbsHeap {
     }
 }
 
-class Data implements Comparable<Data>{
+class Data implements Comparable<Data> {
     int origin;
     int absValue;
 
-    public Data(int origin){
+    public Data(int origin) {
         this.origin = origin;
         this.absValue = Math.abs(this.origin);
     }
 
     @Override
     public int compareTo(Data o) {
-        // TODO Auto-generated method stub
-        if(this.absValue > o.absValue){
+        if (this.absValue > o.absValue) {
             return 1;
-        }
-        else if(this.absValue == o.absValue){
-            if(this.origin > o.origin){
+        } else if (this.absValue == o.absValue) {
+            if (this.origin > o.origin) {
                 return 1;
-            }
-            else return -1;
-        }
-        else return -1;
+            } else
+                return -1;
+        } else
+            return -1;
     }
 }
