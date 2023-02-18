@@ -25,22 +25,21 @@ public class BallonFactory {
         }
 
         Arrays.sort(ballonTime);
-        long start = 1;
-        Long end = (long) 1000000 * (long) 1000000;
+        long start = 0;
+        long end = (long) ballonTime[0] * (long) M;
+        // 최악의 경우 : 가장 빨리 풍선을 부는 사람이 풍선 M개를 전부다 불어야 하는 경우
 
-        Long result = 0;
         while (start <= end) {
             long mid = (start + end) / 2;
 
             if (check(mid)) {
-                result = mid;
                 end = mid - 1;
             } else {
                 start = mid + 1;
             }
         }
 
-        bw.write(result + "\n");
+        bw.write(start + "\n");
         bw.flush();
         bw.close();
         br.close();
@@ -51,29 +50,17 @@ public class BallonFactory {
         boolean result = true;
         long standardTime = mid;
 
-        // 가장 오래걸리는 사람이 제한시간동안 얼마나 많은 풍선을 만들 수 있는지 판별
-        // 중간에 풍선갯수가 필요갯수 이상으로 초과될 경우 반복문 강제 종료
+        // 주어진 시간 mid 동안 각 스태프들이 몇개의 풍선을 만드는지 계산
+        // 필요한 풍선갯수 이상으로 많은 풍선을 만들 수 있는 경우 mid 를 줄여야 하므로 true 반환
+        // 필요한 풍선 갯수만큼 만들 수 없는 경우 mid 를 늘려야 하므로 false 반환
 
-        // 가장 오래 걸리는 사람이 제한시간내에 풍선을 1개도 만들지 못할 경우 또한 고려해야 한다.
-        // 그렇다면 제한 시간내에 풍선을 만들지 못하는 경우 다른 사람은 만들수 있는지 판별
-        // 다른 사람조차 할수 있는 사람이 없으면 false 반환
-        long ballonCount = mid / ballonTime[ballonTime.length - 1];
-        if (ballonCount < M) {
-            // 제한 시간동안 풍선을 만드는데 가장 오래 걸리는 사람이 풍선을 최대한 만드는 데 걸린 시간
-            standardTime = ballonCount * ballonTime[ballonTime.length - 1];
+        long sum = 0;
+        for (int i = 0; i < ballonTime.length; i++) {
+            sum += standardTime / (long) ballonTime[i];
+        }
 
-            int i = 2;
-            while (ballonCount < M) {
-                ballonCount += standardTime / ballonTime[ballonTime.length - i];
-                i++;
-                if (i > ballonTime.length)
-                    break;
-            }
-
-            // 배열을 모두 다 거쳤는데도 필요한 풍선을 모두 만들지 못한 경우(제한시간이 부족함)
-            if (ballonCount < M) {
-                result = false;
-            }
+        if (sum < M) {
+            result = false;
         }
         return result;
     }
