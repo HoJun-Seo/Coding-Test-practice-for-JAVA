@@ -5,121 +5,133 @@ import java.io.BufferedWriter;
 import java.io.IOException;
 import java.io.InputStreamReader;
 import java.io.OutputStreamWriter;
-import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.HashMap;
-import java.util.LinkedList;
-import java.util.List;
-import java.util.Queue;
 
 public class MakeWord {
     public static void main(String[] args) throws IOException {
         BufferedReader br = new BufferedReader(new InputStreamReader(System.in));
         BufferedWriter bw = new BufferedWriter(new OutputStreamWriter(System.out));
 
-        List<String> dictionary = new ArrayList<>();
-        Queue<String> puzzleQueue = new LinkedList<>();
+        String[] dictionaryArray = new String[200001];
 
-        while (true) {
+        for (int i = 0; i < dictionaryArray.length; i++) {
 
             String input = br.readLine();
             if (input.equals("-"))
                 break;
 
-            dictionary.add(input);
+            dictionaryArray[i] = input;
         }
 
-        String[] dictionaryArray = dictionary.toArray(new String[dictionary.size()]);
+        // 사전에 있는 단어와 퍼즐에 있는 글자들의 알파벳이 몇번 나왔는지 비교
+        // 퍼즐에 있는 글자로 사전에 있는 단어를 만들수 있는 경우
+        // 퍼즐의 글자들중 해당 단어를 구성할 수 있는 글자에 카운트 1씩 추가
+        // 해시맵을 쓰는게 편할듯?
 
         while (true) {
+
             String input = br.readLine();
+            int index = 0;
             if (input.equals("#"))
                 break;
+            else {
 
-            puzzleQueue.offer(input);
-        }
+                HashMap<Character, Integer> puzzleMap = new HashMap<>();
+                for (int i = 0; i < input.length(); i++) {
+                    char ch = input.charAt(i);
+                    puzzleMap.put(ch, 0);
+                }
 
-        // 퍼즐에 똑같은 글자가 있는 경우 같은 탐색을 중복하게 되므로 이를 방지하기 위해 해시맵을 사용하자.
-        // 1. 특정한 글자를 포함하고 있는지 살핀다.
-        // 2. 특정한 글자를 포함하고 있는 경우, 퍼즐에 있는 단어를 중복 사용하지 않고 해당 단어를 만들수 있는지 확인한다.
-        // 3. 만들수 있는 경우 해당 글자에서의 카운트를 늘린다.
-        // 4. 위와 같은 방식으로 사전에 있는 모든 단어들을 확인한다.
-        // 5. 퍼즐에 있는 모든 글자 하나하나씩(중복되지 않게) 위 과정을 수행한다.
+                while (true) {
+                    HashMap<Character, Integer> alphabetMap = new HashMap<>();
+                    String word = dictionaryArray[index];
+                    if (word == null)
+                        break;
+                    else {
 
-        while (!puzzleQueue.isEmpty()) {
-            String str = puzzleQueue.poll();
-            List<String> puzzle = new ArrayList<>();
+                        // 반복문을 돌면서 단어에 어떤 알파벳이 몇번씩 나왔는지 확인
+                        for (int i = 0; i < word.length(); i++) {
+                            char ch = word.charAt(i);
 
-            for (int i = 0; i < str.length(); i++) {
-                puzzle.add(String.valueOf(str.charAt(i)));
-            }
-
-            HashMap<String, Integer> checkHashMap = new HashMap<>();
-
-            for (int i = 0; i < puzzle.size(); i++) {
-                String center = puzzle.get(i);
-                checkHashMap.put(center, 0); // 이러면 중복된 글자는 전부다 0 부터 시작함
-
-                for (int j = 0; j < dictionaryArray.length; j++) {
-                    String word = dictionaryArray[j];
-
-                    if (word.contains(center)) {
-                        // 특정 글자를 포함하고 있는 경우 그 퍼즐안에 있는 다른 글자들로 해당 단어를 만들수 있는지 확인
-                        // 일단 필수로 포함되는 글자 하나부터 먼저 날리고 시작
-                        word = word.replaceFirst(center, "");
-                        for (int x = 0; x < puzzle.size(); x++) {
-                            if (x == i) // 퍼즐 중앙에 있던(필수로 포함되는) 글자는 이미 제거되었음
-                                continue;
-                            else {
-                                if (word.contains(puzzle.get(x))) {
-                                    word = word.replaceFirst(puzzle.get(x), "");
-                                }
-
-                                if (word.equals("")) {
-                                    break;
-                                }
+                            if (alphabetMap.containsKey(ch)) {
+                                int value = alphabetMap.get(ch);
+                                value++;
+                                alphabetMap.put(ch, value);
+                            } else {
+                                alphabetMap.put(ch, 1);
                             }
                         }
 
-                        if (word.equals("")) {
-                            // 특정 글자를 필수로 포함시켰을 때 단어 완성이 가능한 경우
-                            int value = checkHashMap.get(center);
-                            value++;
-                            checkHashMap.put(center, value);
+                        // 퍼즐에 있는 글자로 단어를 완성할 수 있는지 확인
+                        for (int i = 0; i < input.length(); i++) {
+                            char ch = input.charAt(i);
+
+                            if (alphabetMap.containsKey(ch)) {
+                                int value = alphabetMap.get(ch);
+                                value--;
+                                alphabetMap.put(ch, value);
+                            }
                         }
+
+                        boolean check = true;
+                        Object[] keyArray = alphabetMap.keySet().toArray();
+                        for (int i = 0; i < keyArray.length; i++) {
+                            int value = alphabetMap.get((Character) keyArray[i]);
+
+                            if (value > 0) {
+                                check = false;
+                                break;
+                            }
+                        }
+
+                        // 퍼즐에 있는 글자로 단어를 만들수 있는 경우
+                        if (check) {
+                            for (int i = 0; i < keyArray.length; i++) {
+                                char ch = (Character) keyArray[i];
+
+                                int value = puzzleMap.get(ch);
+                                value++;
+                                puzzleMap.put(ch, value);
+                            }
+                        }
+
+                        index++;
                     }
                 }
-            }
 
-            // 퍼즐에 있는 모든 글자 하나하나를 중앙에 위치 시켰을 때 만들수 있는 단어 갯수 계산 끝
-            // 가장 쉬운경우, 가장 어려운 경우를 정답으로 출력
+                // 퍼즐의 글자들 중에서 value 가 가장 작은값, 가장 큰값 순서대로 출력
+                Object[] keyArray = puzzleMap.keySet().toArray();
+                Arrays.sort(keyArray);
 
-            String minKey = "";
-            String maxKey = "";
-            int minValue = Integer.MAX_VALUE;
-            int maxValue = Integer.MIN_VALUE;
+                int minValue = Integer.MAX_VALUE;
+                int maxValue = Integer.MIN_VALUE;
 
-            Object[] keyArray = checkHashMap.keySet().toArray();
-            Arrays.sort(keyArray);
-            for (int i = 0; i < keyArray.length; i++) {
+                String minKey = "";
+                String maxKey = "";
+                for (int i = 0; i < keyArray.length; i++) {
 
-                int value = checkHashMap.get(keyArray[i]);
-                if (value == minValue) {
-                    minKey += (String) keyArray[i];
-                } else if (value < minValue) {
-                    minValue = value;
-                    minKey = (String) keyArray[i];
+                    int value = puzzleMap.get(keyArray[i]);
+
+                    if (value == minValue) {
+                        minKey += String.valueOf(keyArray[i]);
+                        minValue = value;
+                    } else if (value < minValue) {
+                        minKey = String.valueOf(keyArray[i]);
+                        minValue = value;
+                    }
+
+                    if (value == maxValue) {
+                        maxKey += String.valueOf(keyArray[i]);
+                        maxValue = value;
+                    } else if (value > maxValue) {
+                        maxKey = String.valueOf(keyArray[i]);
+                        maxValue = value;
+                    }
                 }
 
-                if (value == maxValue) {
-                    maxKey += (String) keyArray[i];
-                } else if (value > maxValue) {
-                    maxValue = value;
-                    maxKey = (String) keyArray[i];
-                }
+                bw.write(minKey + " " + minValue + " " + maxKey + " " + maxValue + "\n");
             }
-
-            bw.write(minKey + " " + minValue + " " + maxKey + " " + maxValue + "\n");
         }
 
         bw.flush();
