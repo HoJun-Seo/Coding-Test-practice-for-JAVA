@@ -9,6 +9,10 @@ import java.util.Arrays;
 import java.util.HashMap;
 
 public class MakeWord {
+
+    static HashMap<Character, Integer> puzzleMap = null;
+    static HashMap<Character, Integer> alphabetMap = null;
+
     public static void main(String[] args) throws IOException {
         BufferedReader br = new BufferedReader(new InputStreamReader(System.in));
         BufferedWriter bw = new BufferedWriter(new OutputStreamWriter(System.out));
@@ -37,14 +41,14 @@ public class MakeWord {
                 break;
             else {
 
-                HashMap<Character, Integer> puzzleMap = new HashMap<>();
+                puzzleMap = new HashMap<>();
                 for (int i = 0; i < input.length(); i++) {
                     char ch = input.charAt(i);
                     puzzleMap.put(ch, 0);
                 }
 
                 while (true) {
-                    HashMap<Character, Integer> alphabetMap = new HashMap<>();
+                    alphabetMap = new HashMap<>();
                     String word = dictionaryArray[index];
                     if (word == null)
                         break;
