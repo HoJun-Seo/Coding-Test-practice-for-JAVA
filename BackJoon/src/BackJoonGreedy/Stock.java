@@ -5,9 +5,6 @@ import java.io.BufferedWriter;
 import java.io.IOException;
 import java.io.InputStreamReader;
 import java.io.OutputStreamWriter;
-import java.util.Arrays;
-import java.util.LinkedList;
-import java.util.Queue;
 
 public class Stock {
     public static void main(String[] args) throws NumberFormatException, IOException {
@@ -30,46 +27,16 @@ public class Stock {
             }
 
             long result = 0;
-            int maxIndex = -1;
-            Queue<Integer> stockQueue = new LinkedList<>();
-            for (int index = 0; index < stockArray.length; index++) {
-                if (stockQueue.isEmpty() && maxIndex == -1) {
-                    // 최대값 찾기 - 현재 가진 주식보다 비싸야 함
-                    // 시간초과, 최대값 찾는 로직 때문인듯
-                    // 배열을 분리해서 가져온 다음 Arrays.stream().max().getAsInt() 를 활용한다면?
-                    // 반례 : 마지막까지 갔을 때 배열이 잘려나오지 않는 상황을 고려 못함
-                    int[] cloneArray = Arrays.copyOfRange(stockArray, index + 1, stockArray.length);
-                    int max = 0;
-                    if (cloneArray.length > 0) {
-                        max = Arrays.stream(cloneArray).max().getAsInt();
-                    }
-                    if (max != 0 && max > stockArray[index]) {
-                        for (int j = index + 1; j < stockArray.length; j++) {
-                            if (max == stockArray[j]) {
-                                maxIndex = j;
-                                break;
-                            }
-                        }
-                    }
-
-                    // 현재 구매한 주식보다 값이 더 비싼 날짜가 있는 경우
-                    if (maxIndex != -1) {
-                        stockQueue.offer(stockArray[index]);
-                    }
+            // 뒤에서 부터 확인
+            // 가장 마지막 인덱스를 최대값으로 두고 시작
+            // 왼쪽 방향으로 탐색하면서 최대값보다 작은값이 나오면 (최대값 - 작은값) 을 결과값에 더해줌
+            // 최대값보다 큰 값이 나온다면 최대값 변경
+            int max = Integer.MIN_VALUE;
+            for (int index = stockArray.length - 1; index >= 0; index--) {
+                if (stockArray[index] > max) {
+                    max = stockArray[index];
                 } else {
-                    // 가지고 있는 주식이 있는 경우
-                    // 최고액 날짜가 아닌 경우
-                    if (index != maxIndex) {
-                        stockQueue.offer(stockArray[index]);
-                        // 각각 더하기 할게 아닌거 같음
-                        // 따로따로 계산
-                    } else {
-                        // 주식이 최고액인 날짜가 왔을 때
-                        while (!stockQueue.isEmpty()) {
-                            result += stockArray[index] - stockQueue.poll();
-                        }
-                        maxIndex = -1; // 최고액 날짜 초기화
-                    }
+                    result += (max - stockArray[index]);
                 }
             }
 
