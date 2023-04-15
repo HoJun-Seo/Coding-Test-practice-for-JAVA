@@ -5,63 +5,75 @@ import java.io.BufferedWriter;
 import java.io.IOException;
 import java.io.InputStreamReader;
 import java.io.OutputStreamWriter;
+import java.util.LinkedList;
+import java.util.Queue;
 
 public class TrashClear {
     public static void main(String[] args) throws NumberFormatException, IOException {
+        new TrashClear().solution();
+    }
+
+    private void solution() throws NumberFormatException, IOException {
         BufferedReader br = new BufferedReader(new InputStreamReader(System.in));
         BufferedWriter bw = new BufferedWriter(new OutputStreamWriter(System.out));
 
-        int count = Integer.parseInt(br.readLine());
-        
-        int[] resultArray = new int[count];
+        int tc = Integer.parseInt(br.readLine());
+        for (int i = 0; i < tc; i++) {
+            String[] input = br.readLine().split(" ");
+            int weight = Integer.parseInt(input[0]);
+            int pointCount = Integer.parseInt(input[1]);
 
-        for(int i = 0; i < count; i++){
-            
-            int[] trashArray = new int[100001];
+            Queue<Trash> queue = new LinkedList<>();
+            for (int j = 0; j < pointCount; j++) {
+                input = br.readLine().split(" ");
+                int point = Integer.parseInt(input[0]);
+                int value = Integer.parseInt(input[1]);
 
-            String[] inputArray = br.readLine().split(" ");
-            int carWeight = Integer.parseInt(inputArray[0]);
-            int trashCount = Integer.parseInt(inputArray[1]);
-            int[] trashPoint = new int[trashCount];
-
-            for(int j = 0; j < trashCount; j++){
-
-                inputArray = br.readLine().split(" ");
-                int trashIndex = Integer.parseInt(inputArray[0]);
-                int trashWeight = Integer.parseInt(inputArray[1]);
-
-                trashArray[trashIndex] = trashWeight;
-                trashPoint[j] = trashIndex;
+                Trash trash = new Trash(point, value);
+                queue.offer(trash);
             }
+
+            int currentDistance = 0;
             int currentWeight = 0;
-            int moveDis = 0;
-            for(int j = 0; j < trashPoint.length; j++){
 
-                int trashWeight = trashArray[trashPoint[j]];
-                if(currentWeight + trashWeight == carWeight){
-                    moveDis += trashPoint[j] * 2;
+            int totalDistance = 0;
+            while (!queue.isEmpty()) {
+                Trash trash = queue.peek();
+
+                currentDistance += (trash.point - currentDistance);
+                if (currentWeight + trash.value < weight) {
+                    currentWeight += trash.value;
+                    queue.poll();
+                } else if (currentWeight + trash.value == weight) {
+                    totalDistance += currentDistance * 2;
                     currentWeight = 0;
-                }
-                else if(currentWeight + trashWeight > carWeight){
-                    moveDis += trashPoint[j] * 2;
+                    currentDistance = 0;
+                    queue.poll();
+                } else if (currentWeight + trash.value > weight) {
+                    totalDistance += currentDistance * 2;
                     currentWeight = 0;
-                    j--;
-                }
-                else{
-                    currentWeight += trashWeight;
+                    currentDistance = 0;
                 }
             }
-            if(currentWeight < carWeight && currentWeight > 0){
-                moveDis += trashPoint[trashPoint.length-1] * 2;
-            }
-            resultArray[i] = moveDis;
+
+            if (currentDistance > 0)
+                totalDistance += currentDistance * 2;
+
+            bw.write(totalDistance + "\n");
         }
 
-        for(int i = 0; i < resultArray.length; i++){
-            bw.write(resultArray[i] + "\n");
-        }
         bw.flush();
         bw.close();
         br.close();
+    }
+}
+
+class Trash {
+    int point;
+    int value;
+
+    public Trash(int point, int value) {
+        this.point = point;
+        this.value = value;
     }
 }
