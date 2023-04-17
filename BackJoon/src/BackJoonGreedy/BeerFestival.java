@@ -42,42 +42,7 @@ public class BeerFestival {
         long end = max;
         Arrays.sort(beers);
 
-        long result = Integer.MAX_VALUE;
-        while (start <= end) {
-            long mid = (start + end) / 2;
-
-            List<Integer> preferList = new ArrayList<>();
-            for (int i = 0; i < beers.length; i++) {
-                if (beers[i].alchol > mid)
-                    break;
-                else
-                    preferList.add(beers[i].prefer);
-            }
-            if (preferList.size() < n) {
-                start = mid + 1;
-            } else {
-
-                Collections.sort(preferList, Collections.reverseOrder());
-                long total = 0;
-                for (int i = 0; i < n; i++) {
-                    total += preferList.get(i);
-                }
-
-                if (total < m) {
-                    start = mid + 1;
-                } else {
-                    end = mid - 1;
-                    result = Math.min(result, mid);
-                }
-            }
-
-        }
-
-        if (result == Integer.MAX_VALUE) {
-            bw.write(-1 + "\n");
-        } else {
-            bw.write(result + "\n");
-        }
+        
         bw.flush();
         bw.close();
         br.close();
