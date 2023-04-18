@@ -5,10 +5,8 @@ import java.io.BufferedWriter;
 import java.io.IOException;
 import java.io.InputStreamReader;
 import java.io.OutputStreamWriter;
-import java.util.ArrayList;
 import java.util.Arrays;
-import java.util.Collections;
-import java.util.List;
+import java.util.PriorityQueue;
 
 public class BeerFestival {
     public static void main(String[] args) throws IOException {
@@ -26,7 +24,6 @@ public class BeerFestival {
         int k = Integer.parseInt(input[2]);
         Beer[] beers = new Beer[k];
 
-        long max = Integer.MIN_VALUE;
         for (int i = 0; i < k; i++) {
             input = br.readLine().split(" ");
             int prefer = Integer.parseInt(input[0]);
@@ -34,15 +31,34 @@ public class BeerFestival {
 
             Beer beer = new Beer(prefer, alchol);
             beers[i] = beer;
-
-            max = Math.max(max, alchol);
         }
 
-        long start = 1;
-        long end = max;
-        Arrays.sort(beers);
+        Arrays.sort(beers); // 도수 기준 오름차순 정렬
+        PriorityQueue<Integer> priorityQueue = new PriorityQueue<>(); // 선호도 기준 오름차순 정렬 큐
 
-        
+        long total = 0;
+        int result = 0;
+        for (int i = 0; i < beers.length; i++) {
+
+            priorityQueue.offer(beers[i].prefer);
+            total += beers[i].prefer;
+
+            if (priorityQueue.size() > n) {
+                total -= priorityQueue.poll();
+            }
+
+            if (priorityQueue.size() == n && total >= m) {
+                result = beers[i].alchol;
+                break;
+            }
+        }
+
+        if (result == 0) {
+            bw.write(-1 + "\n");
+        } else {
+            bw.write(result + "\n");
+        }
+
         bw.flush();
         bw.close();
         br.close();
