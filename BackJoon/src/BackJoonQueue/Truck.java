@@ -22,47 +22,57 @@ public class Truck {
         int bridgeLength = Integer.parseInt(input[1]);
         int weight = Integer.parseInt(input[2]);
 
-        Queue<TruckObject> queue = new LinkedList<>();
+        Queue<TruckObject> truckQueue = new LinkedList<>();
         input = br.readLine().split(" ");
         for (int i = 0; i < count; i++) {
             TruckObject truckObject = new TruckObject(Integer.parseInt(input[i]), 0);
-            queue.offer(truckObject);
+            truckQueue.offer(truckObject);
         }
 
         int currentWeight = 0;
-        // 각 반복마다 트럭들은 하나의 행동밖에 할 수 없다
-        // 이동, 이탈 둘중 하나
+
+        Queue<TruckObject> bridgQueue = new LinkedList<>();
         int result = 0;
-        while (!queue.isEmpty()) {
-
-            result += 1;
-            int size = queue.size();
-            // 모든 트럭들에 대해 각 반복마다 행동 결정
-            for (int i = 0; i < size; i++) {
-                TruckObject truck = queue.poll();
-                // 아직 다리를 통과하지 않은 트럭이라면
-                if (truck.distance == 0) {
-                    // 다리위에 올라갈수 있다면
-                    if (currentWeight + truck.weight <= weight) {
-                        truck.distance += 1;
-                        currentWeight += truck.weight;
-                        queue.offer(truck);
+        while (!truckQueue.isEmpty()) {
+            // 현재 다리 위에 있는 트럭들 이동거리 1씩 추가
+            if (!bridgQueue.isEmpty()) {
+                int size = bridgQueue.size();
+                for (int i = 0; i < size; i++) {
+                    TruckObject truckObject = bridgQueue.poll();
+                    if (truckObject.distance < bridgeLength) {
+                        truckObject.distance += 1;
+                        bridgQueue.offer(truckObject);
                     } else {
-                        // 현재 다리위에 올라갈 수 없다면
-                        queue.offer(truck);
-                    }
-                } else {
-                    // 다리위를 지나가고 있는 트럭이라면
-                    truck.distance += 1;
-
-                    if (truck.distance <= bridgeLength) {
-                        queue.offer(truck);
-                    } else {
-                        currentWeight -= truck.weight;
+                        currentWeight -= truckObject.weight;
                     }
                 }
             }
 
+            TruckObject truck = truckQueue.peek();
+            if (currentWeight + truck.weight <= weight) {
+                truck = truckQueue.poll();
+                truck.distance += 1;
+                currentWeight += truck.weight;
+                bridgQueue.offer(truck);
+            }
+
+            result++;
+        }
+
+        // 모든 트럭들이 다리위로 올라서게 된 이후
+        while (!bridgQueue.isEmpty()) {
+            int size = bridgQueue.size();
+
+            for (int i = 0; i < size; i++) {
+                TruckObject truck = bridgQueue.poll();
+                if (truck.distance < bridgeLength) {
+                    truck.distance += 1;
+                    bridgQueue.offer(truck);
+                } else {
+                    currentWeight -= truck.weight;
+                }
+            }
+            result++;
         }
 
         bw.write(result + "\n");
