@@ -33,8 +33,8 @@ public class DynamicRoller {
         for(int i = 0; i < inkArray.length - 1; i++){
 
             int start = i + 1;
-            int end = (visArray.length - 1) - start;
-            while(start + 1 < end){
+            int end = visArray.length - 1;
+            while(start <= end){
                 int index = (start + end) / 2;
 
                 if(visArray[index] > inkArray[i]){
@@ -45,8 +45,8 @@ public class DynamicRoller {
                 }
             }
 
-            // start 값 자체가 아니라 start 값의 인덱스를 찾아야함
-            resultArray[i] = end;
+            // start 의 위치가 매 반복마다 증가하므로, 증가한만큼 감소시켜준다.
+            resultArray[i] = end - i;
         }
 
         for(int i = 0; i < resultArray.length; i++){
