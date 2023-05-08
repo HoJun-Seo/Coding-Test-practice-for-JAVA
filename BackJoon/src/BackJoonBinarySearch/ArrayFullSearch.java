@@ -42,23 +42,25 @@ public class ArrayFullSearch {
                 
                 if(a[n - 1] < k){
                     bw.write(0 + "\n");
+                }
+                else if(a[0] >= k){
+                    bw.write(n + "\n");
                 } else{
-                    while(start + 1 < end){
+                    while(start <= end){
                         int mid = (start + end) / 2;
     
+                        // 입력 받은 값보다 작은경우
                         if(a[mid] < k){
-                            start = mid;
+                            start = mid + 1;
                         }
-                        else if(a[mid] > k){
-                            end = mid;
-                        }
-                        else if(a[mid] == k){
-                            end = mid;
-                            break;
+                        else {
+                            // 입력 받은 값 보다 크거나 같은 경우
+                            // 중복이 허용되는 배열에 대한 처리
+                            end = mid - 1;
                         }
                     }
     
-                    bw.write((n - end) + "\n");
+                    bw.write(((n-1) - end) + "\n");
                 }
             }
             // 입력 받은 숫자보다 큰 숫자의 갯수
@@ -67,19 +69,24 @@ public class ArrayFullSearch {
 
                 if(a[n - 1] <= k){
                     bw.write(0 + "\n");
+                } else if(a[0] > k){
+                    bw.write(n + "\n");
                 } else {
-                    while(start + 1 < end){
+                    while(start <= end){
                         int mid = (start + end) / 2;
     
-                        if(a[mid] < k){
-                            start = mid;
+                        // 입력받은 값보다 작거나 같은 경우
+                        if(a[mid] <= k){
+                            start = mid + 1;
                         }
-                        else if(a[mid] > k){
-                            end = mid;
+                        else{
+                            // 입력받은 값 보다 큰 경우
+                            // 중복이 허용되는 배열에 대한 처리
+                            end = mid - 1;
                         }
                     }
     
-                    bw.write((n - end) + "\n");
+                    bw.write(((n-1) - end) + "\n");
                 }
             }
             // i 보다 크거나 같고, j 보다 작거나 같은 숫자의 갯수 
@@ -87,11 +94,41 @@ public class ArrayFullSearch {
                 long number1 = Long.parseLong(input[1]);
                 long number2 = Long.parseLong(input[2]);
 
-                while(start + 1 < end){
+                // 두 가지 조건의 범위를 따로따로 구한 다음에
+                // 중첩되는 만큼만 뽑아낸다
+                int low = 0;
+                int high = 0;
+                while(start <= end){
                     int mid = (start + end) / 2;
 
-                    
+                    // i 보다 작은 경우
+                    if(a[mid] < number1){
+                        start = mid + 1;
+                    } else{
+                        // i 보다 크거나 같은 경우
+                        end = mid - 1;
+                    }
                 }
+
+                low = end;
+
+                start = 0;
+                end = n - 1;
+                while(start <= end){
+                    int mid = (start + end) / 2;
+
+                    // j 보다 큰 경우
+                    if(a[mid] > number2){
+                        end = mid - 1;
+                    } else{
+                        // j 보다 작거나 같은 경우
+                        start = mid + 1;
+                    }
+                }
+
+                high = start;
+
+                bw.write((high - low - 1) + "\n");
             }
         }
 
