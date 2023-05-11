@@ -42,8 +42,12 @@ public class Fireworks {
                 beforeFire--;
                 lastFire--;
 
-                fireDeque.offerLast(beforeFire);
-                fireDeque.offerLast(lastFire);
+                if (beforeFire > 0) {
+                    fireDeque.offerLast(beforeFire);
+                }
+                if (lastFire > 0) {
+                    fireDeque.offerLast(lastFire);
+                }
             } else {
                 int firstFire = fireDeque.pollFirst();
                 fireDeque.pollFirst();
@@ -52,8 +56,12 @@ public class Fireworks {
                 firstFire--;
                 afterFire--;
 
-                fireDeque.offerFirst(afterFire);
-                fireDeque.offerFirst(firstFire);
+                if (afterFire > 0) {
+                    fireDeque.offerFirst(afterFire);
+                }
+                if (firstFire > 0) {
+                    fireDeque.offerFirst(firstFire);
+                }
             }
         }
 
