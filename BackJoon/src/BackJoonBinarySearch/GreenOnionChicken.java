@@ -54,6 +54,9 @@ public class GreenOnionChicken {
             mid = (start + end) / 2;
         }
 
+        // 입력받은 파의 전체 길이에서
+        // mid 값으로 파를 잘라서 주문받은 파닭의 갯수만큼 넣어줬을때
+        // 사용된 파의 길이를 빼준 값이 정답이다.
         long result = sum - (mid * chickenCount);
 
         bw.write(result + "\n");
