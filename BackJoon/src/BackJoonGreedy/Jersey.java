@@ -5,13 +5,9 @@ import java.io.BufferedWriter;
 import java.io.IOException;
 import java.io.InputStreamReader;
 import java.io.OutputStreamWriter;
-import java.util.Arrays;
-import java.util.HashMap;
 
 public class Jersey {
 
-    static HashMap<Integer, HashMap<Integer, Integer>> jerseyMap = new HashMap<>();
-    static int result = 0;
     public static void main(String[] args) throws NumberFormatException, IOException {
         new Jersey().solution();
     }
@@ -22,111 +18,37 @@ public class Jersey {
 
         int jerseyCount = Integer.parseInt(br.readLine());
         int studentCount = Integer.parseInt(br.readLine());
-        Student[] students = new Student[studentCount];
+        char[] jerseyArray = new char[jerseyCount + 1];
 
-        for(int i = 0; i < jerseyCount; i++){
-            String size = br.readLine();
-
-            HashMap<Integer, Integer> jerseyNumber = null;
-            if(size.equals("S")){
-                if(jerseyMap.containsKey(0)){
-                    jerseyNumber = jerseyMap.get(0);
-                    jerseyNumber.put(i+1, 0);
-                    jerseyMap.put(0, jerseyNumber);
-                }
-                else{
-                    jerseyNumber = new HashMap<>();
-                    jerseyNumber.put(i+1, 0);
-                    jerseyMap.put(0, jerseyNumber);
-                }
-            }
-            else if(size.equals("M")){
-                if(jerseyMap.containsKey(1)){
-                    jerseyNumber = jerseyMap.get(1);
-                    jerseyNumber.put(i+1, 0);
-                    jerseyMap.put(1, jerseyNumber);
-                }
-                else{
-                    jerseyNumber = new HashMap<>();
-                    jerseyNumber.put(i+1, 0);
-                    jerseyMap.put(1, jerseyNumber);
-                }
-            }
-            else if(size.equals("L")){
-                if(jerseyMap.containsKey(2)){
-                    jerseyNumber = jerseyMap.get(2);
-                    jerseyNumber.put(i+1, 0);
-                    jerseyMap.put(2, jerseyNumber);
-                }
-                else{
-                    jerseyNumber = new HashMap<>();
-                    jerseyNumber.put(i+1, 0);
-                    jerseyMap.put(2, jerseyNumber);
-                }
-            }
+        // 입력조건상 어차피 0번째 인덱스는 이용 될일이 없다.
+        // 그러므로 Z 로 초기화 해두고 방치한다.
+        jerseyArray[0] = 'Z';
+        for (int i = 1; i < jerseyArray.length; i++) {
+            jerseyArray[i] = br.readLine().charAt(0);
         }
 
-        for(int i = 0; i < studentCount; i++){
+        int result = 0;
+        for (int i = 0; i < studentCount; i++) {
             String[] input = br.readLine().split(" ");
-
-            String size = input[0];
+            char size = input[0].charAt(0);
             int number = Integer.parseInt(input[1]);
-
-            Student student = null;
-            if(size.equals("S")){
-                student = new Student(0, number);
+            // 학생들이 가지고 있는 저지의 숫자보다 더 큰 값의 등번호를 요구할 수도 있기 때문에
+            // 저지 배열의 크기가 학생들이 원하는 등번호 숫자보다 더 큰지부터 확인한다.
+            if (number <= jerseyArray.length - 1) {
+                // 원하는 등번호가 적힌 저지가 학생이 요구하는 사이즈보다 크거나 같은 경우
+                // 아스키 코드상으로 보면 L(76) -> M(77) -> S(83) 으로 S 가 가장 커지기 때문에
+                // Z(90) 에서 각 사이즈의 아스키 코드값을 빼주는 것으로 크기를 뒤집는다.
+                if ('Z' - jerseyArray[number] >= 'Z' - size) {
+                    result++;
+                    // Z 로 설정하는 이유 : 사이즈 크기를 비교할 때 이미 분배된 저지의 경우
+                    // 아스키 코드 값을 Z - Z = 0 으로 만들어서 저지를 분배받지 못하게 하기 위함
+                    jerseyArray[number] = 'Z';
+                }
             }
-            else if(size.equals("M")){
-                student = new Student(1, number);
-            }
-            else if(size.equals("L")){
-                student = new Student(2, number);
-            }
-
-            students[i] = student;
-        }
-
-        Arrays.sort(students);
-        
-        for(int i = 0; i < students.length; i++){
-            Student student = students[i];
-            
-            jerseySearch(student);
         }
 
         bw.write(result + "\n");
         bw.flush();
         bw.close();
-    }
-
-    private void jerseySearch(Student student) {
-
-        HashMap<Integer, Integer> jerseyNumber = null;
-        for(int j = student.size; j <= 2; j++){
-            if(jerseyMap.containsKey(j)){
-                jerseyNumber = jerseyMap.get(j);
-                if(jerseyNumber.containsKey(student.number)){
-                    jerseyNumber.remove(student.number);
-                    result++;
-                    jerseyMap.put(j, jerseyNumber);
-                    break;
-                }
-            }
-        }
-    }
-}
-
-class Student implements Comparable<Student>{
-    int size;
-    int number;
-
-    public Student(int size, int number){
-        this.size = size;
-        this.number = number;
-    }
-
-    @Override
-    public int compareTo(Student o) {
-        return this.size - o.size ;
     }
 }
