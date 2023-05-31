@@ -5,8 +5,7 @@ import java.io.BufferedWriter;
 import java.io.IOException;
 import java.io.InputStreamReader;
 import java.io.OutputStreamWriter;
-import java.util.Arrays;
-import java.util.HashMap;
+import java.util.PriorityQueue;
 
 public class OneDimension2048 {
     public static void main(String[] args) throws NumberFormatException, IOException {
@@ -19,57 +18,34 @@ public class OneDimension2048 {
 
         int count = Integer.parseInt(br.readLine());
         String[] input = br.readLine().split(" ");
-        HashMap<Long, Integer> hashMap = new HashMap<>();
+
+        PriorityQueue<Long> prior = new PriorityQueue<>();
+
         for (int i = 0; i < count; i++) {
-            long number = Long.parseLong(input[i]);
-            if (number != 0) {
-
-                if (hashMap.containsKey(number)) {
-                    hashMap.put(number, hashMap.get(number) + 1);
-                } else
-                    hashMap.put(number, 1);
+            if (!input[i].equals("0")) {
+                prior.offer(Long.parseLong(input[i]));
             }
         }
 
-        while (true) {
-            Object[] keyArray = hashMap.keySet().toArray();
-            Arrays.sort(keyArray);
-            boolean check = false;
-            for (int i = 0; i < keyArray.length; i++) {
-                int value = hashMap.get((long) keyArray[i]);
-
-                if (value > 1) {
-                    check = true;
-
-                    if (value - 2 == 0) {
-                        hashMap.remove((long) keyArray[i]);
-                    } else {
-                        hashMap.put((long) keyArray[i], value - 2);
-                    }
-
-                    long number = (long) keyArray[i] * 2;
-
-                    if (hashMap.containsKey(number)) {
-                        hashMap.put(number, hashMap.get(number) + 1);
-                    } else {
-                        hashMap.put(number, 1);
-                    }
-
-                    break;
-                }
-            }
-
-            if (!check)
-                break;
-        }
-
-        Object[] keyArray = hashMap.keySet().toArray();
         long max = 0;
-        for (int i = 0; i < keyArray.length; i++) {
-            max = Math.max(max, (long) keyArray[i]);
+        while (prior.size() > 1) {
+            long number1 = prior.poll();
+            long number2 = prior.poll();
+
+            if (number1 == number2) {
+                max = number2 * 2;
+                prior.offer(max);
+            } else {
+                prior.offer(number2);
+            }
         }
 
-        bw.write(max + "\n");
+        if (prior.size() == 1) {
+            bw.write(prior.poll() + "\n");
+        } else {
+            bw.write(max + "\n");
+        }
+
         bw.flush();
         bw.close();
         br.close();
