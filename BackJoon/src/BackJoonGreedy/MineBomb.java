@@ -5,104 +5,51 @@ import java.io.BufferedWriter;
 import java.io.IOException;
 import java.io.InputStreamReader;
 import java.io.OutputStreamWriter;
-import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.List;
 
 public class MineBomb {
     public static void main(String[] args) throws NumberFormatException, IOException {
+        new MineBomb().solution();
+    }
+
+    private void solution() throws NumberFormatException, IOException {
         BufferedReader br = new BufferedReader(new InputStreamReader(System.in));
         BufferedWriter bw = new BufferedWriter(new OutputStreamWriter(System.out));
 
         int count = Integer.parseInt(br.readLine());
+        int[] mineArray = new int[count];
 
-        Mine[] mineArray = new Mine[count]; // 정렬 및 인덱스 확인
-        int[] array = new int[count]; // 요소가 0인 경우 지뢰가 터졌다는 의미
-        List<Integer> resultList = new ArrayList<>();
-
-        for(int i = 0; i < mineArray.length; i++){    
-            Mine mine = new Mine();
-            mine.index = i;
-            mine.value = Integer.parseInt(br.readLine());
-
-            array[i] = mine.value;
-            mineArray[i] = mine;
+        for (int i = 0; i < count; i++) {
+            mineArray[i] = Integer.parseInt(br.readLine());
         }
 
-        Arrays.sort(mineArray);
-
-        for(int i = 0; i < mineArray.length; i++){
-            Mine mine = mineArray[i];
-
-            int index = mine.index;
-            int value = mine.value;
-            if(array[index] > 0){ // 지뢰가 터지지 않은 곳일 경우
-                array[index] = 0;
-
-                resultList.add(index+1);
-                boolean leftBomb = true;
-                boolean rightBomb = true;
-                
-                // 왼쪽 확인
-                int leftValue = value;
-                int leftIndex = index-1;
-                while(leftBomb){
-                    if(leftIndex >= 0){
-                        if(array[leftIndex] < leftValue){
-                            leftValue = array[leftIndex];
-                            array[leftIndex] = 0;
-                            leftIndex--;
-                        }
-                        else{
-                            leftBomb = false;
-                        }
-                    }
-                    else{
-                        leftBomb = false;
+        if (count == 1) {
+            bw.write(1 + "\n");
+        } else {
+            // 어차피 순차탐색 중이므로 터뜨려야 하는 지뢰를 찾았을 때 별다른 정렬 로직을 사용할 필요 없이
+            // 바로 출력해주면 된다.
+            for (int i = 0; i < mineArray.length; i++) {
+                // 시작 지점을 터뜨려야 할 경우
+                if (i == 0) {
+                    if (mineArray[i] >= mineArray[i + 1]) {
+                        bw.write((i + 1) + "\n");
                     }
                 }
-                // 오른쪽 확인
-                int rightValue = value;
-                int rightIndex = index + 1;
-                while(rightBomb){
-                    if(rightIndex < array.length){
-                        if(array[rightIndex] < rightValue){
-                            rightValue = array[rightIndex];
-                            array[rightIndex] = 0;
-                            rightIndex++;
-                        }
-                        else{
-                            rightBomb = false;
-                        }
+                // 마지막 지점을 터뜨려야 할 경우
+                else if (i == mineArray.length - 1) {
+                    if (mineArray[i] >= mineArray[i - 1]) {
+                        bw.write((i + 1) + "\n");
                     }
-                    else{
-                        rightBomb = false;
+                }
+                // 중간 지점을 터뜨려야 할 경우
+                else {
+                    if (mineArray[i] >= mineArray[i - 1] && mineArray[i] >= mineArray[i + 1]) {
+                        bw.write((i + 1) + "\n");
                     }
                 }
             }
-            else{
-                continue;
-            }
-        }
-
-        Object[] resultArray = resultList.toArray();
-        Arrays.sort(resultArray);
-        for(int i = 0; i < resultArray.length; i++){
-            bw.write(resultArray[i] + "\n");
         }
         bw.flush();
         bw.close();
         br.close();
-    }
-}
-
-class Mine implements Comparable<Mine>{
-    int value;
-    int index;
-
-    @Override
-    public int compareTo(Mine o) {
-        
-        return o.value - this.value;
     }
 }
