@@ -5,7 +5,6 @@ import java.io.BufferedWriter;
 import java.io.IOException;
 import java.io.InputStreamReader;
 import java.io.OutputStreamWriter;
-import java.util.HashMap;
 
 public class BreakPot {
     public static void main(String[] args) throws NumberFormatException, IOException {
@@ -17,7 +16,8 @@ public class BreakPot {
         BufferedWriter bw = new BufferedWriter(new OutputStreamWriter(System.out));
 
         int size = Integer.parseInt(br.readLine());
-        int[][] potArray = new int[size][3];
+        boolean[] breakArray = new boolean[1000001];
+        int result = 0;
 
         for (int i = 0; i < size; i++) {
             String[] input = br.readLine().split(" ");
@@ -25,38 +25,22 @@ public class BreakPot {
             int number2 = Integer.parseInt(input[1]);
             int number3 = Integer.parseInt(input[2]);
 
-            potArray[i][0] = number1;
-            potArray[i][1] = number2;
-            potArray[i][2] = number3;
+            if (!breakArray[number1] && !breakArray[number2] && !breakArray[number3]) {
+                result++;
+            }
+            breakArray[number1] = true;
+            breakArray[number2] = true;
+            breakArray[number3] = true;
         }
 
-        int result = 0;
-        // 화분이 깨질때마다 쓰여있는 숫자를 체크
-        // 현재 탐색중인 화분과 깨진 화분에 적혀있던 숫자들 비교
-        // 깨진 화분에 적혀있던 숫자가 포함되어 있다면 화분 깨기(깨는 숫자는 늘어나지 않음)
-        // 지금까지 깨진 화분에 적혀있던 숫자가 하나도 포함되어 있지 않으면 깨는 화분 갯수 늘리기
-        HashMap<Integer, Integer> breakPoint = new HashMap<>();
-        for (int i = 0; i < potArray.length; i++) {
-            if (breakPoint.isEmpty()) {
-                breakPoint.put(potArray[i][0], 0);
-                breakPoint.put(potArray[i][1], 0);
-                breakPoint.put(potArray[i][2], 0);
-                result++;
-            } else {
-                if (breakPoint.containsKey(potArray[i][0]) ||
-                        breakPoint.containsKey(potArray[i][1]) ||
-                        breakPoint.containsKey(potArray[i][2])) {
-                    breakPoint.put(potArray[i][0], 0);
-                    breakPoint.put(potArray[i][1], 0);
-                    breakPoint.put(potArray[i][2], 0);
-                } else {
-                    breakPoint.put(potArray[i][0], 0);
-                    breakPoint.put(potArray[i][1], 0);
-                    breakPoint.put(potArray[i][2], 0);
-                    result++;
-                }
-            }
-        }
+        // 현재 탐색중인 항아리에 적힌 숫자를 인덱스로 하였을 때, 배열에서 해당하는 인덱스의 값이 true인 경우
+        // 이미 앞에서 깨진적이 있는 항아리라는 뜻이므로 항아리를 직접 깨는 횟수를 늘리지 않고,
+        // 만약 항아리에 적혀있는 숫자에 해당하는 인덱스 값이 모두 false 이라면
+        // 앞에서 겹치는 숫자가 적힌 항아리가 깨진적이 없다는 뜻이므로 항아리를 직접 깨는 횟수를 1 증가시켜준다.
+
+        // 앞에서 겹치는 숫자가 존재해서 이미 깨져있는 항아리든, 조건에 해당되지 않아서 직접 깨야하는 항아리든
+        // 매 탐색때마다 발견한 항아리는 반드시 깨지는 상황이 기본이므로
+        // 항아리에 적혀있는 숫자에 해당하는 인덱스를 모두 true 로 변경시켜준다.
 
         bw.write(result + "\n");
         bw.flush();
