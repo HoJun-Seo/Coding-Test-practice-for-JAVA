@@ -24,7 +24,7 @@ public class TreeCut {
         for (int i = 0; i < count; i++) {
             int value = Integer.parseInt(tree[i]);
             int growValue = Integer.parseInt(grow[i]);
-            Tree treeObject = new Tree(i, value, growValue);
+            Tree treeObject = new Tree(value, growValue);
 
             treeArray[i] = treeObject;
         }
@@ -53,13 +53,10 @@ public class TreeCut {
 }
 
 class Tree implements Comparable<Tree> {
-
-    int index;
     int value;
     int growValue;
 
-    public Tree(int index, int value, int growValue) {
-        this.index = index;
+    public Tree(int value, int growValue) {
         this.value = value;
         this.growValue = growValue;
     }
