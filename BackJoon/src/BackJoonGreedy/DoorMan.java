@@ -26,79 +26,43 @@ public class DoorMan {
 
         int manCount = 0;
         int womanCount = 0;
+        char firstGender = ' ';
+        char secondGender = ' ';
         while (Math.abs(manCount - womanCount) <= x && !people.isEmpty()) {
-            char ch = people.pollFirst();
+            firstGender = people.pollFirst();
 
-            if (ch == 'M') {
-                // 현재 남자가 더 많아서 남자를 더 받으면 차이가 늘어나는 경우
-                if (manCount > womanCount) {
-                    // 두번째 사람 확인
-                    if (people.size() > 0) {
-                        if (people.peekFirst() == 'W') {
-                            // 두번째 사람이 여자인 경우 두번째 사람 먼저 입장
+            if (firstGender == 'M') {
+                if (Math.abs((manCount + 1) - womanCount) <= x) {
+                    manCount++;
+                } else {
+                    if (!people.isEmpty()) {
+                        secondGender = people.pollFirst();
+                        if (secondGender == 'W') {
                             womanCount++;
-                            people.pollFirst();
-                            people.offerFirst(ch);
-                            if (Math.abs(manCount - womanCount) > x) {
-                                womanCount--;
-                                break;
-                            }
+                            people.offerFirst(firstGender);
                         } else {
-                            // 두번째 사람도 남자인 경우 그냥 첫번째 사람 입장
-                            manCount++;
-                            if (Math.abs(manCount - womanCount) > x) {
-                                manCount--;
-                                break;
-                            }
-                        }
-                    } else {
-                        // 두번째 사람까지 확인이 불가능한 경우
-                        manCount++;
-                        if (Math.abs(manCount - womanCount) > x) {
-                            manCount--;
                             break;
                         }
-                    }
-                } else {
-                    // 여자가 더 많거나 같은 경우
-                    manCount++;
-                    if (Math.abs(manCount - womanCount) > x) {
-                        manCount--;
+                    } else {
                         break;
                     }
                 }
-            } else if (ch == 'W') {
-                if (womanCount > manCount) {
-                    if (people.size() > 0) {
-                        if (people.peekFirst() == 'M') {
+            } else if (firstGender == 'W') {
+                if (Math.abs(manCount - (womanCount + 1)) <= x) {
+                    womanCount++;
+                } else {
+                    if (!people.isEmpty()) {
+                        secondGender = people.pollFirst();
+                        if (secondGender == 'M') {
                             manCount++;
-                            people.pollFirst();
-                            people.offerFirst(ch);
-                            if (Math.abs(manCount - womanCount) > x) {
-                                manCount--;
-                                break;
-                            }
+                            people.offerFirst(firstGender);
                         } else {
-                            womanCount++;
-                            if (Math.abs(manCount - womanCount) > x) {
-                                womanCount--;
-                                break;
-                            }
-                        }
-                    } else {
-                        womanCount++;
-                        if (Math.abs(manCount - womanCount) > x) {
-                            womanCount--;
                             break;
                         }
-                    }
-
-                } else {
-                    womanCount++;
-                    if (Math.abs(manCount - womanCount) > x) {
-                        womanCount--;
+                    } else {
                         break;
                     }
+
                 }
             }
         }
