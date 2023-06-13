@@ -5,7 +5,6 @@ import java.io.BufferedWriter;
 import java.io.IOException;
 import java.io.InputStreamReader;
 import java.io.OutputStreamWriter;
-import java.util.LinkedList;
 import java.util.PriorityQueue;
 
 public class TimeOutWork {
@@ -30,18 +29,64 @@ public class TimeOutWork {
             prior.offer(new Work(deadLine, require));
         }
 
-        Work currentWork = prior.poll();
+        int[] check = new int[max + 1];
         int normal = 0;
         int week = 0;
-        for (int i = 1; i <= max; i++) {
-            normal++; // 평일 근무 추가
-            if (normal < 6) {
-
-            } else {
-                normal = 0;
+        for (int i = 1; i < check.length; i++) {
+            if (normal < 5) {
+                // 평일
+                normal++;
+            } else if (normal >= 5 && week < 2) {
+                check[i] = Integer.MIN_VALUE; // 주말
                 week++;
+            } else {
+                // 주말이 지난 후 다시 평일
+                normal = 0;
+                week = 0;
+                normal++;
             }
         }
+
+        int normalStart = 1; // 평시 근무 시작점
+        int overStart = 1; // 시간 외 근무 시작점
+        int result = 0;
+        while (!prior.isEmpty()) {
+            Work work = prior.poll();
+            int deadLine = work.deadLine;
+            int require = work.require;
+            // 평시근무 만으로 마감일까지 맞출 수 있는지 확인
+            while (require > 0 && normalStart <= deadLine) {
+                if (check[normalStart] == Integer.MIN_VALUE) {
+                    normalStart++;
+                } else {
+                    normalStart++;
+                    require--;
+                }
+            }
+            // 로직 상 시간 외 근무 날짜가 평일 근무 날짜를 초과하는 경우는 없음
+            // 평시 근무만으로 업무를 모두 완료하지 못한 경우 '요일과 상관없이' 시간 외 근무 확인
+            if (require > 0) {
+                while (require > 0 && overStart <= deadLine) {
+                    // 해당 일자 시간 외 근무 수행
+                    overStart++;
+                    require--;
+                    result++;
+                }
+            }
+            // 시간 외 근무로도 마감 날짜내에 해결이 안될 경우
+            if (require > 0) {
+                bw.write(-1 + "\n");
+                bw.flush();
+                bw.close();
+                br.close();
+                return;
+            }
+        }
+
+        bw.write(result + "\n");
+        bw.flush();
+        bw.close();
+        br.close();
     }
 }
 
