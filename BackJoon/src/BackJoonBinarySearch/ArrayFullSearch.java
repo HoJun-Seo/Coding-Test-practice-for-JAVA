@@ -35,19 +35,23 @@ public class ArrayFullSearch {
             int category = Integer.parseInt(input[0]);
             long number = Long.parseLong(input[1]);
 
-            int bigCount = 0;
-            int smallCount = 0;
-            if (category == 1 || category == 2) {
-                bigCount = n - upperBound(number);
-                bw.write(bigCount + "\n");
-            } else {
-                long number2 = Long.parseLong(input[2]);
-                bigCount = upperBound(number);
-                smallCount = lowerBound(number2);
+            int numberCount = 0;
+            if (category == 1) {
+                // 크거나 같은 값 갯수
+                numberCount = n - lowerBound(number);
+                bw.write(numberCount + "\n");
 
-                System.out.println(number + " 보다 크거나 같은 시작 인덱스 : " + bigCount);
-                System.out.println(number2 + " 보다 작거나 같은 시작 인덱스 : " + smallCount);
-                bw.write((smallCount - bigCount) + "\n");
+            } else if (category == 2) {
+                // 큰 값 구하기
+                numberCount = n - upperBound(category, number);
+                bw.write(numberCount + "\n");
+            } else if (category == 3) {
+                // i보다 크거나 같고, j 보다 작거나 같은 값
+                long number2 = Long.parseLong(input[2]); // j
+
+                numberCount = lowerBound(number);
+                long jCount = upperBound(category, number2);
+                bw.write((jCount - numberCount + 1) + "\n");
             }
         }
 
@@ -56,8 +60,7 @@ public class ArrayFullSearch {
         br.close();
     }
 
-    // 중복이 존재하는 배열에서 특정값보다 작거나 같은 숫자의 갯수 구하기
-    // number2 값이 존재하지 않을 때 number2 보다 작은 값이 아니라 더 큰값을 찾게됨, 이거 고쳐야 함
+    // 중복이 존재하는 배열에서 특정값이 나오는 첫번째 인덱스를 구함(크거나 같은 숫자 갯수 구하기)
     private int lowerBound(long number2) {
         int start = 0;
         int end = arrayA.length;
@@ -74,8 +77,8 @@ public class ArrayFullSearch {
         return start;
     }
 
-    // 중복이 존재하는 배열에서 특정 값보다 크거나 같은, 또는 큰 숫자의 갯수 구하기
-    private int upperBound(long number) {
+    // 중복이 존재하는 배열에서 특정값이 아닌 원소가 나오는 첫번째 인덱스(특정값보다 큰 값 구하기, 작거나 같은 값 구하기)
+    private int upperBound(int category, long number) {
         int start = 0;
         int end = arrayA.length;
 
@@ -89,6 +92,12 @@ public class ArrayFullSearch {
             }
         }
 
-        return start;
+        if (category == 2) {
+            // 큰 값
+            return start;
+        } else {
+            // 작거나 같은 값
+            return start - 1;
+        }
     }
 }
