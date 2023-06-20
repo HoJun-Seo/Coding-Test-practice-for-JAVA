@@ -37,10 +37,10 @@ public class WaterBottle {
             }
         }
 
+        long result = 0;
         if (deque.size() + bottleCount <= goal) {
-            bw.write(0 + "\n");
+            bw.write(result + "\n");
         } else if (bottleCount == 1 && deque.size() + bottleCount > goal) {
-            long result = 0;
             if (deque.size() > 1) {
                 while (deque.size() + bottleCount > goal && deque.size() > 1) {
                     long bottle1 = deque.pollFirst();

@@ -12,128 +12,83 @@ public class ArrayFullSearch {
         new ArrayFullSearch().solution();
     }
 
+    static long[] arrayA = null;
+
     private void solution() throws IOException {
         BufferedReader br = new BufferedReader(new InputStreamReader(System.in));
         BufferedWriter bw = new BufferedWriter(new OutputStreamWriter(System.out));
 
         String[] input = br.readLine().split(" ");
-
         int n = Integer.parseInt(input[0]);
         int m = Integer.parseInt(input[1]);
 
-        long[] a = new long[n];
-        input = br.readLine().split(" ");
+        arrayA = new long[n];
 
-        for(int i = 0; i < a.length; i++){
-            a[i] = Long.parseLong(input[i]);
+        input = br.readLine().split(" ");
+        for (int i = 0; i < n; i++) {
+            arrayA[i] = Long.parseLong(input[i]);
         }
 
-        Arrays.sort(a);
-
-        for(int i = 0; i < m; i++){
+        Arrays.sort(arrayA);
+        for (int i = 0; i < m; i++) {
             input = br.readLine().split(" ");
             int category = Integer.parseInt(input[0]);
+            long number = Long.parseLong(input[1]);
 
-            int start = 0;
-            int end = n - 1;
-            // 입력 받은 숫자보다 크거나 같은 숫자의 갯수
-            if(category == 1){
-                long k = Long.parseLong(input[1]);
-                
-                if(a[n - 1] < k){
-                    bw.write(0 + "\n");
-                }
-                else if(a[0] >= k){
-                    bw.write(n + "\n");
-                } else{
-                    while(start <= end){
-                        int mid = (start + end) / 2;
-    
-                        // 입력 받은 값보다 작은경우
-                        if(a[mid] < k){
-                            start = mid + 1;
-                        }
-                        else {
-                            // 입력 받은 값 보다 크거나 같은 경우
-                            // 중복이 허용되는 배열에 대한 처리
-                            end = mid - 1;
-                        }
-                    }
-    
-                    bw.write(((n-1) - end) + "\n");
-                }
-            }
-            // 입력 받은 숫자보다 큰 숫자의 갯수
-            else if(category == 2){
-                long k = Long.parseLong(input[1]);
-
-                if(a[n - 1] <= k){
-                    bw.write(0 + "\n");
-                } else if(a[0] > k){
-                    bw.write(n + "\n");
-                } else {
-                    while(start <= end){
-                        int mid = (start + end) / 2;
-    
-                        // 입력받은 값보다 작거나 같은 경우
-                        if(a[mid] <= k){
-                            start = mid + 1;
-                        }
-                        else{
-                            // 입력받은 값 보다 큰 경우
-                            // 중복이 허용되는 배열에 대한 처리
-                            end = mid - 1;
-                        }
-                    }
-    
-                    bw.write(((n-1) - end) + "\n");
-                }
-            }
-            // i 보다 크거나 같고, j 보다 작거나 같은 숫자의 갯수 
-            else if(category == 3){
-                long number1 = Long.parseLong(input[1]);
+            int bigCount = 0;
+            int smallCount = 0;
+            if (category == 1 || category == 2) {
+                bigCount = n - upperBound(number);
+                bw.write(bigCount + "\n");
+            } else {
                 long number2 = Long.parseLong(input[2]);
+                bigCount = upperBound(number);
+                smallCount = lowerBound(number2);
 
-                // 두 가지 조건의 범위를 따로따로 구한 다음에
-                // 중첩되는 만큼만 뽑아낸다
-                int low = 0;
-                int high = 0;
-                while(start <= end){
-                    int mid = (start + end) / 2;
-
-                    // i 보다 작은 경우
-                    if(a[mid] < number1){
-                        start = mid + 1;
-                    } else{
-                        // i 보다 크거나 같은 경우
-                        end = mid - 1;
-                    }
-                }
-
-                low = end;
-
-                start = 0;
-                end = n - 1;
-                while(start <= end){
-                    int mid = (start + end) / 2;
-
-                    // j 보다 큰 경우
-                    if(a[mid] > number2){
-                        end = mid - 1;
-                    } else{
-                        // j 보다 작거나 같은 경우
-                        start = mid + 1;
-                    }
-                }
-
-                high = start;
-
-                bw.write((high - low - 1) + "\n");
+                System.out.println(number + " 보다 크거나 같은 시작 인덱스 : " + bigCount);
+                System.out.println(number2 + " 보다 작거나 같은 시작 인덱스 : " + smallCount);
+                bw.write((smallCount - bigCount) + "\n");
             }
         }
 
         bw.flush();
         bw.close();
         br.close();
+    }
+
+    // 중복이 존재하는 배열에서 특정값보다 작거나 같은 숫자의 갯수 구하기
+    // number2 값이 존재하지 않을 때 number2 보다 작은 값이 아니라 더 큰값을 찾게됨, 이거 고쳐야 함
+    private int lowerBound(long number2) {
+        int start = 0;
+        int end = arrayA.length;
+
+        while (start < end) {
+            int mid = (start + end) / 2;
+
+            if (number2 <= arrayA[mid]) {
+                end = mid;
+            } else {
+                start = mid + 1;
+            }
+        }
+        return start;
+    }
+
+    // 중복이 존재하는 배열에서 특정 값보다 크거나 같은, 또는 큰 숫자의 갯수 구하기
+    private int upperBound(long number) {
+        int start = 0;
+        int end = arrayA.length;
+
+        while (start < end) {
+            int mid = (start + end) / 2;
+
+            if (arrayA[mid] <= number) {
+                start = mid + 1;
+            } else {
+                end = mid;
+            }
+        }
+
+        return start;
     }
 }
