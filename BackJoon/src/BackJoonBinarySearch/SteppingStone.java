@@ -40,6 +40,7 @@ public class SteppingStone {
                 long mid = (start + end) / 2;
                 // mid 값은 마지막 점프의 폭
 
+                // 1부터 특정값 mid 까지의 합
                 long sum = (mid * (mid + 1)) / 2;
                 if (sum <= total) {
                     result = Math.max(mid, result);
