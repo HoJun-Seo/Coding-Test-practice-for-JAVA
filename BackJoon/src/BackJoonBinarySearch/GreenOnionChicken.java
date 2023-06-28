@@ -38,26 +38,25 @@ public class GreenOnionChicken {
 
         long start = 1; // 입력받을 수 있는 파의 최소 길이
         long end = max; // 입력받은 파의 최대 길이
-
-        long mid = (start + end) / 2;
-
+        long greenOnion = 0;
         // mid 값으로 주문받은 파닭에 모두 파를 넣을 수 있는지 확인한다.
         while (start <= end) {
 
+            long mid = (start + end) / 2;
             // mid 값으로 파를 잘랐을 때 모든 파닭에 파를 넣어줄 수 있는 경우
             if (onionSlice(mid)) {
+                greenOnion = mid;
                 start = mid + 1;
             } else {
                 // mid 값으로 파를 잘랐을 때 모든 파닭에 파를 넣어줄 수 없는 경우
                 end = mid - 1;
             }
-            mid = (start + end) / 2;
         }
 
         // 입력받은 파의 전체 길이에서
         // mid 값으로 파를 잘라서 주문받은 파닭의 갯수만큼 넣어줬을때
         // 사용된 파의 길이를 빼준 값이 정답이다.
-        long result = sum - (mid * chickenCount);
+        long result = sum - (greenOnion * chickenCount);
 
         bw.write(result + "\n");
         bw.flush();
