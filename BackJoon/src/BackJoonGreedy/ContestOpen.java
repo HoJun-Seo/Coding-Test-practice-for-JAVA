@@ -65,6 +65,8 @@ public class ContestOpen {
                     contestArray[3]--;
                 } else if(contestArray[1] == contestArray[3] && contestArray[1] > 0){
                     contestArray[1]--;
+                } else {
+                    break;
                 }
             }
             count++;
