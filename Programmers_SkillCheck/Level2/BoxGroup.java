@@ -45,7 +45,6 @@ public class BoxGroup {
                 answer = Math.max(answer, score);
             }
         }
-        System.out.println(answer);
         return answer;
     }
 }
