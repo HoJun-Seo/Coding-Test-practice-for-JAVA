@@ -13,8 +13,8 @@ public class Beach {
 
     static boolean[][] visited;
     static char[][] beach;
-    static int[] dx = {0, 1, -1, 0, -1, -1, 1, 1};
-	static int[] dy = {1, 0, 0, -1, 1, -1, 1, -1};
+    static int[][] odd = { { -1, 0 }, { 1, 0 }, { 0, -1 }, { 0, 1 }, { -1, -1 }, { 1, -1 } };
+    static int[][] even = { { -1, 0 }, { 1, 0 }, { 0, -1 }, { 0, 1 }, { -1, 1 }, { 1, 1 } };
     static int n, m;
     static int count = 0;
 
@@ -27,13 +27,13 @@ public class Beach {
         m = Integer.parseInt(input[1]);
         beach = new char[n][m];
         visited = new boolean[n][m];
-        for(int i = 0; i < n; i++){
+        for (int i = 0; i < n; i++) {
             beach[i] = br.readLine().toCharArray();
         }
 
-        for(int i = 0; i < n; i++){
-            for(int j = 0; j < m; j++){
-                if(!visited[i][j]){
+        for (int i = 0; i < n; i++) {
+            for (int j = 0; j < m; j++) {
+                if (!visited[i][j]) {
                     dfs(i, j);
                 }
             }
@@ -46,16 +46,39 @@ public class Beach {
     }
 
     private void dfs(int i, int j) {
-        visited[i][j] = true;
-        for(int k = 0; k < 8; k++){
-            int di = i + dx[k];
-            int dj = j + dy[k];
-            if(di < 0 || di >= n || dj < 0 || dj >= m){
-                continue;
-            } else {
-                if(beach[i][j] != beach[di][dj] && !visited[di][dj]){
-                    dfs(di, dj);
-                    count++;
+
+        if (beach[i][j] == '#') {
+            visited[i][j] = true;
+            // 홀수 줄
+            if ((i + 1) % 2 == 1) {
+                for (int k = 0; k < 6; k++) {
+                    int di = i + odd[k][0];
+                    int dj = j + odd[k][1];
+                    if (di < 0 || di >= n || dj < 0 || dj >= m) {
+                        continue;
+                    } else {
+                        if (beach[di][dj] == '.') {
+                            count++;
+                        } else if (beach[di][dj] == '#' && !visited[di][dj]) {
+                            dfs(di, dj);
+                        }
+                    }
+                }
+            }
+            // 짝수 줄
+            else if ((i + 1) % 2 == 0) {
+                for (int k = 0; k < 6; k++) {
+                    int di = i + even[k][0];
+                    int dj = j + even[k][1];
+                    if (di < 0 || di >= n || dj < 0 || dj >= m) {
+                        continue;
+                    } else {
+                        if (beach[di][dj] == '.') {
+                            count++;
+                        } else if (beach[di][dj] == '#' && !visited[di][dj]) {
+                            dfs(di, dj);
+                        }
+                    }
                 }
             }
         }
