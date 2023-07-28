@@ -15,7 +15,6 @@ public class Penetration {
     static boolean[][] visited;
     static int[] dx = { -1, 1, 0, 0 };
     static int[] dy = { 0, 0, -1, 1 };
-    static boolean check = false;
     static int m, n;
 
     private void solution() throws IOException {
@@ -36,14 +35,16 @@ public class Penetration {
         }
 
         for (int i = 0; i < n; i++) {
-            if (figure[0][i] == 0) {
+            if (figure[0][i] == 0 && !visited[0][i]) {
                 dfs(0, i);
             }
+        }
 
-            if (check) {
+        boolean check = false;
+        for (int i = 0; i < n; i++) {
+            if (visited[m - 1][i]) {
+                check = true;
                 break;
-            } else {
-                visited = new boolean[m][n];
             }
         }
 
@@ -60,20 +61,16 @@ public class Penetration {
     private void dfs(int i, int j) {
 
         visited[i][j] = true;
-        if (i == m - 1) {
-            check = true;
-        } else {
-            for (int x = 0; x < 4; x++) {
-                int ii = i + dx[x];
-                int jj = j + dy[x];
 
-                if (ii < 0 || jj < 0 || ii >= m || jj >= n) {
-                    continue;
-                } else if (!visited[ii][jj] && figure[ii][jj] == 0) {
-                    dfs(ii, jj);
-                }
+        for (int x = 0; x < 4; x++) {
+            int ii = i + dx[x];
+            int jj = j + dy[x];
+
+            if (ii < 0 || jj < 0 || ii >= m || jj >= n) {
+                continue;
+            } else if (!visited[ii][jj] && figure[ii][jj] == 0) {
+                dfs(ii, jj);
             }
         }
-
     }
 }
